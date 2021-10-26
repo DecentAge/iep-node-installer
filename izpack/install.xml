@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<izpack:installation version="5.0" xmlns:izpack="http://izpack.org/schema/installation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://izpack.org/schema/installation http://izpack.org/schema/5.0/izpack-installation-5.0.xsd">
+	<properties>
+		<property file="../iep-node/src/main/resources/system.properties" prefix="iep.props" />
+	</properties>
+	<info>
+		<appname>XIN</appname>
+		<appversion>@{iep.props.xin.version}</appversion>
+		<url>https://infinity-economics.io</url>
+		<run-privileged condition="izpack.windowsinstall" />
+		<javaversion>11</javaversion>
+		<requiresjdk>yes</requiresjdk>
+	</info>
+
+	<dynamicvariables>
+		<variable name="xin.installer.packInstallCompleted" value="false" checkonce="false" />
+	</dynamicvariables>
+
+	<variables>
+		<variable name="DesktopShortcutCheckboxEnabled" value="true" />
+		<variable name="TargetPanel.dir.mac" value="/Applications/xin.app" />
+		<variable name="xin.installer.shutdownServer" value="true" />
+		<variable name="xin.installer.cleanInstallDir" value="false" />
+	</variables>
+	<logging>
+		<log-file pattern="${USER_HOME}/iep-node-installer/installation.log" append="true" mkdirs="true" level="FINE" />
+	</logging>
+	<conditions>
+		<condition type="exists" id="xin.installer.stopBeforeInstallation">
+			<file>$INSTALL_PATH/bin/stop.sh</file>
+		</condition>
+		<condition type="variable" id="xin.installer.startAfterInstallation">
+			<name>xin.installer.startAfterInstallation</name>
+			<value>true</value>
+		</condition>
+	</conditions>
+
+	<jar src="../build/libs/iep-node-installer.jar" stage="both" />
+
+
+	<listeners>
+		<!-- Windows specific listener -->
+		<listener classname="RegistryInstallerListener" stage="install">
+			<os family="windows" />
+		</listener>
+
+		<!-- Windows specific listener -->
+		<listener classname="RegistryUninstallerListener" stage="uninstall">
+			<os family="windows" />
+		</listener>
+
+		<listener classname="SummaryLoggerInstallerListener" stage="install" />
+
+		<!-- <listener classname="xin.installer.InstallerListener" stage="install" /> -->
+	</listeners>
+	<natives>
+		<native type="izpack" name="ShellLink.dll" uninstaller="true">
+			<os family="windows" />
+		</native>
+		<native type="izpack" name="ShellLink_x64.dll" uninstaller="true">
+			<os family="windows" />
+		</native>
+		<native type="izpack" name="WinSetupAPI.dll" uninstaller="true">
+			<os family="windows" />
+		</native>
+		<native type="izpack" name="WinSetupAPI_x64.dll" uninstaller="true">
+			<os family="windows" />
+		</native>
+		<native type="3rdparty" name="COIOSHelper.dll" uninstaller="true">
+			<os family="windows" />
+		</native>
+		<native type="3rdparty" name="COIOSHelper_x64.dll" uninstaller="true">
+			<os family="windows" />
+		</native>
+	</natives>
+	<guiprefs height="700" width="600" resizable="yes">
+		<!-- Heading settings -->
+		<modifier key="showDebugWindow" value="true" />
+		<modifier key="useSplashScreen" value="2000" />
+		<modifier key="useHeadingPanel" value="yes" />
+		<modifier key="headingLineCount" value="1" />
+		<modifier key="headingFontSize" value="1.5" />
+		<modifier key="headingBackgroundColor" value="0x00ffffff" />
+		<modifier key="headingForegroundColor" value="0x00e63043" />
+		<modifier key="headingLineCount" value="1" />
+		<modifier key="headingImageOnLeft" value="yes" />
+		<modifier key="headingPanelCounter" value="progressbar" />
+		<modifier key="headingPanelCounterPos" value="inNavigationPanel" />
+
+		<!-- Language Selection Dialog -->
+		<modifier key="langDisplayType" value="default" />
+		<modifier key="useFlags" value="yes" />
+
+		<!-- IzPack Panels -->
+		<modifier key="useButtonIcons" value="yes" />
+		<modifier key="useLabelIcons" value="yes" />
+		<modifier key="layoutAnchor" value="NORTHWEST" />
+
+		<!-- Gaps between components -->
+		<modifier key="allYGap" value="4" />
+		<modifier key="paragraphYGap" value="10" />
+		<modifier key="filler1YGap" value="5" />
+		<modifier key="filler3XGap" value="10" />
+	</guiprefs>
+
+	<locale>
+		<langpack iso3="eng" />
+		<langpack iso3="fra" />
+		<langpack iso3="deu" />
+		<langpack iso3="ita" />
+		<langpack iso3="jpn" />
+		<langpack iso3="spa" />
+		<langpack iso3="dan" />
+		<langpack iso3="ell" />
+		<langpack iso3="cat" />
+		<langpack iso3="nld" />
+		<langpack iso3="fin" />
+		<langpack iso3="swe" />
+		<langpack iso3="prt" />
+		<langpack iso3="pol" />
+		<langpack iso3="rus" />
+		<langpack iso3="ukr" />
+		<langpack iso3="hun" />
+		<langpack iso3="slk" />
+		<langpack iso3="ron" />
+		<langpack iso3="msa" />
+		<langpack iso3="nor" />
+		<langpack iso3="chn" />
+		<langpack iso3="srp" />
+		<langpack iso3="ces" />
+		<langpack iso3="kor" />
+		<langpack iso3="glg" />
+	</locale>
+
+	<resources>
+		<res id="Splash.image" src="images/splash.jpg" />
+		<res id="Heading.image" src="images/logo.png" />
+		<res id="InfoPanel.info" src="@{iep.node.path}/CHANGELOG-@{iep.props.xin.version}.md" parse="yes" />
+		<res id="LicencePanel.licence" src="@{iep.node.path}/LICENSE.txt" />
+		<res id="Installer.image" src="images/installer_left_pane.png" />
+		<res id="shortcutSpec.xml" src="windows/shortcutSpec.xml" />
+		<res id="Unix_shortcutSpec.xml" src="linux/Unix_shortcutSpec.xml" />
+		<res id="RegistrySpec.xml" src="windows/RegistrySpec.xml" />
+		<res id="installer.langsel.img" src="images/logo.png" />
+		<res id="userInputSpec.xml" src="user_input_spec.xml" parse="yes" type="xml" />
+		<res id="ProcessPanel.Spec.xml" src="process_panel_spec.xml" />
+	</resources>
+	
+	<panels>
+		<panel classname="CheckedHelloPanel" />
+		<panel classname="LicencePanel" />
+		<panel classname="TargetPanel" />
+		<panel classname="ProcessPanel" />
+		<panel classname="UserInputPanel" id="iep.config.panel" />
+		<!-- <actions> <action stage="postvalidate" classname="xin.installer.UpdateNodePropertiesAction" /> </actions> </panel> -->
+		<panel classname="InstallPanel" />
+		<panel classname="ShortcutPanel" />
+		<panel classname="SimpleFinishPanel" allowClose="true" />
+	</panels>
+	
+	<packs>
+		<pack name="server" required="yes">
+			<description>Common Server Files</description>
+			<file src="@{iep.node.path}/build/iep-node.zip" targetdir="${INSTALL_PATH}" unpack="true" override="true">
+				<archivefileset dir="iep-node">
+					<exclude name="conf/**" />
+				</archivefileset>
+			</file>
+
+			<singlefile src="@{iep.node.path}/conf/custom.properties" target="${USER_HOME}/.xin/conf/custom.properties" override="true" />
+			<singlefile src="@{iep.node.path}/conf/templates/installer.properties" target="${USER_HOME}/.xin/conf/installer.properties" override="true" />
+			<singlefile src="logs" target="${INSTALL_PATH}/logs" override="true"/>
+			<executable targetfile="${INSTALL_PATH}/logs" />
+
+			<parsable targetfile="${USER_HOME}/.xin/conf/installer.properties" type="plain" />
+			<executable targetfile="${INSTALL_PATH}/bin/iep-node" />
+			<executable targetfile="${INSTALL_PATH}/bin/dev" />
+		</pack>
+		<pack name="server.unix" os="unix" required="yes" hidden="true">
+			<description>Unix Specific Resources</description>
+			<os family="unix" />
+
+			<file src="linux/start.sh" targetdir="${INSTALL_PATH}/bin" override="true" />
+			<executable targetfile="${INSTALL_PATH}/bin/start.sh" stage="postinstall" failure="warn" keep="true" />
+			<file src="linux/stop.sh" targetdir="${INSTALL_PATH}/bin" override="true" />
+			<executable targetfile="${INSTALL_PATH}/bin/stop.sh" />
+		</pack>
+
+		<pack name="server.windows" os="windows" required="yes" hidden="true">
+			<description>Windows Specific Resources</description>
+			<os family="windows" />
+
+			<singlefile src="windows/JavaExe.exe" target="${INSTALL_PATH}/bin/iep-node.exe" override="true" />
+			<file src="windows/iep-node.properties" targetdir="${INSTALL_PATH}/bin" override="true" />
+
+			<file src="windows/start.bat" targetdir="${INSTALL_PATH}/bin" override="true" />
+			<executable targetfile="${INSTALL_PATH}/bin/start.bat" />
+			<file src="windows/stop.bat" targetdir="${INSTALL_PATH}/bin" override="true" />
+			<executable targetfile="${INSTALL_PATH}/bin/stop.bat" />
+		</pack>
+
+		<!-- <pack name="jdk" required="yes" uninstall="false" hidden="true"> <os family="windows"/> <os family="mac"/> <description>Java JDK</description> <fileset dir="../jdk.runtime" targetdir="${INSTALL_PATH}/jdk" override="true"/> <executable targetfile="${INSTALL_PATH}/jdk/bin/java" failure="warn" keep="true"/> <fileset 
+			dir="../javafx-sdk.runtime" targetdir="${INSTALL_PATH}/javafx-sdk" override="true"/> </pack> -->
+
+	</packs>
+</izpack:installation>

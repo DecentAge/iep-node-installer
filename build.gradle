@@ -1,0 +1,95 @@
+apply plugin: 'java'
+apply plugin: 'com.bmuschko.izpack'
+apply plugin: 'eclipse'
+
+eclipse {
+    classpath {
+        downloadJavadoc = true
+        downloadSources = true
+    }
+}
+
+repositories {
+    jcenter()
+}
+
+buildscript {
+    repositories {
+        gradlePluginPortal()
+    }
+
+    dependencies {
+        classpath 'com.bmuschko:gradle-izpack-plugin:3.2'
+    }
+}
+
+sourceCompatibility = 11
+targetCompatibility = 11
+
+configurations {
+  izpackUtils {
+    transitive = false
+  }
+}
+
+dependencies {
+    izpack 'org.bidib.org.codehaus.izpack:izpack-ant:5.2.0.M2'
+    izpackUtils 'org.bidib.org.codehaus.izpack:izpack-wrapper:5.2.0.M2'
+    compileOnly 'org.bidib.org.codehaus.izpack:izpack-compiler:5.2.0.M2'
+}
+
+
+task unzipIzpackUtils(type: Copy) {
+    print "FILE=" + configurations.izpackUtils.singleFile
+    def outputDir = file("${buildDir}/izpack-utils")
+    from zipTree(configurations.izpackUtils.singleFile)
+    into outputDir
+}
+
+izpack {
+    baseDir = file("./izpack")
+    installFile = file('./izpack/install.xml')
+    //outputFile = file("$buildDir/distributions/iep-node-${version}-installer.jar")
+    outputFile = file("${buildDir}/distributions/iep-node-installer.jar")
+    compression = 'deflate'
+    compressionLevel = 9
+    appProperties = ["iep.node.path": file("../iep-node")]
+    //appProperties = ['app.group': 'Griffon', 'app.name': 'griffon', 'app.title': 'Griffon',
+    //                 'app.version': version, 'app.subpath': "Griffon-$version"]
+}
+
+
+task buildInstallerApp() {
+  doLast {
+     exec {
+          executable "./izpack/build-app.sh"
+      }
+  }
+}
+
+task buildInstallerRunner() {
+  doLast {
+     exec {
+          executable "./izpack/build-run.sh"
+      }
+  }
+}
+
+task buildInstallerExe() {
+  doLast {
+     exec {
+          executable "./izpack/build-exe.sh"
+      }
+  }
+}
+
+tasks.register('createInstallers')
+
+unzipIzpackUtils.dependsOn build
+izPackCreateInstaller.dependsOn unzipIzpackUtils
+buildInstallerApp.dependsOn izPackCreateInstaller
+buildInstallerRunner.dependsOn izPackCreateInstaller
+buildInstallerExe.dependsOn izPackCreateInstaller
+
+createInstallers.dependsOn(buildInstallerApp,buildInstallerRunner,buildInstallerExe)
+
