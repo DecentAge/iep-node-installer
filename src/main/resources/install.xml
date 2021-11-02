@@ -162,41 +162,7 @@
 	</panels>
 
 	<packs>
-		<pack name="server" required="yes">
-			<description>Common Server Files</description>
-			<file src="@{iep.node.path}/build/${xin.app.name}.zip" targetdir="${INSTALL_PATH}" unpack="true" override="true">
-				<archivefileset dir="${xin.app.name}">
-					<exclude name="conf/**" />
-				</archivefileset>
-			</file>
-			
-			<singlefile src="@{iep.node.path}/conf/custom.properties" target="${USER_HOME}/.xin/conf/custom.properties" override="true" />
-			<singlefile src="@{iep.node.path}/conf/templates/installer.properties" target="${USER_HOME}/.xin/conf/installer.properties" override="true" />
-			<singlefile src="@{iep.node.path}/src/main/resources/log4j.properties" target="${USER_HOME}/.xin/conf/log4j.properties" override="true" />
-
-			<fileset dir="logs" targetdir="${USER_HOME}/.xin/logs" override="true"/>
-			<executable targetfile="${USER_HOME}/.xin/logs" />
-
-			<parsable targetfile="${USER_HOME}/.xin/conf/installer.properties" type="plain" />
-
-		</pack>
-		
-		<pack name="server.unix" os="unix" required="yes" hidden="true">
-			<description>Unix Specific Resources</description>
-			<os family="unix" />
-
-			<executable targetfile="${INSTALL_PATH}/bin/${xin.app.name}" />
-			<executable targetfile="${INSTALL_PATH}/bin/dev" />
-
-			<file src="linux/start.sh" targetdir="${INSTALL_PATH}/bin" override="true" />
-			<parsable targetfile="${INSTALL_PATH}/bin/start.sh" type="shell" />
-			<executable targetfile="${INSTALL_PATH}/bin/start.sh" stage="postinstall" failure="warn" keep="true" />
-			
-			<file src="linux/stop.sh" targetdir="${INSTALL_PATH}/bin" override="true" />
-			<parsable targetfile="${INSTALL_PATH}/bin/stop.sh" type="shell" />
-			<executable targetfile="${INSTALL_PATH}/bin/stop.sh" stage="uninstall"/>
-		</pack>
-
+	
 		<pack name="server.jre.windows" required="yes" os="windows">
 			<description>OpenLogic JRE</description>
 			<os family="windows" />
@@ -214,7 +180,45 @@
 			</file>
 			<executable targetfile="${INSTALL_PATH}/jre/bin/java" failure="abort" keep="true"/>
 
+		</pack>	
+	
+		<pack name="server" required="yes">
+			<description>Common Server Files</description>
+			<file src="@{iep.node.path}/build/${xin.app.name}.zip" targetdir="${INSTALL_PATH}" unpack="true" override="true">
+				<archivefileset dir="${xin.app.name}">
+					<exclude name="conf/**" />
+				</archivefileset>
+			</file>
+			
+			<singlefile src="@{iep.node.path}/conf/custom.properties" target="${USER_HOME}/.xin/conf/custom.properties" override="true" />
+			<singlefile src="@{iep.node.path}/conf/templates/installer.properties" target="${USER_HOME}/.xin/conf/installer.properties" override="true" />
+			<singlefile src="@{iep.node.path}/src/main/resources/log4j.properties" target="${USER_HOME}/.xin/conf/log4j.properties" override="true" />
+
+			<fileset dir="logs" targetdir="${USER_HOME}/.xin/logs" override="true"/>
+			<executable targetfile="${USER_HOME}/.xin/logs" />
+			<parsable targetfile="${USER_HOME}/.xin/conf/installer.properties" type="plain" />
+
 		</pack>
+		
+		<pack name="server.unix" os="unix" required="yes" hidden="true">
+			<description>Unix Specific Resources</description>
+			<os family="unix" />
+
+			<executable targetfile="${INSTALL_PATH}/bin/iep-node" />
+
+			<executable targetfile="${INSTALL_PATH}/bin/${xin.app.name}" />
+			<executable targetfile="${INSTALL_PATH}/bin/dev" />
+
+			<file src="linux/start.sh" targetdir="${INSTALL_PATH}/bin" override="true" />
+			<parsable targetfile="${INSTALL_PATH}/bin/start.sh" type="shell" />
+			<executable targetfile="${INSTALL_PATH}/bin/start.sh" stage="postinstall" failure="warn" keep="true" />
+			
+			<file src="linux/stop.sh" targetdir="${INSTALL_PATH}/bin" override="true" />
+			<parsable targetfile="${INSTALL_PATH}/bin/stop.sh" type="shell" />
+			<executable targetfile="${INSTALL_PATH}/bin/stop.sh" stage="uninstall"/>
+		</pack>
+
+
 
 
 		<pack name="server.windows" os="windows" required="yes" hidden="true">
@@ -254,9 +258,10 @@
 			</executable>
 		 	-->
 
+			<executable targetfile="${INSTALL_PATH}/bin/iep-node.bat" />
+
 			<executable targetfile="${INSTALL_PATH}/bin/${xin.app.name}.bat" />
 			<executable targetfile="${INSTALL_PATH}/bin/dev.bat" />
-
 			
 			<file src="windows/start.bat" targetdir="${INSTALL_PATH}/bin" override="true" />
 			<executable targetfile="${INSTALL_PATH}/bin/start.bat" />

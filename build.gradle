@@ -45,7 +45,6 @@ dependencies {
     compileOnly 'org.bidib.org.codehaus.izpack:izpack-compiler:5.2.0.M2'
 }
 
-
 izpack {
     baseDir = file("${buildDir}/resources/main")
     installFile = file("${buildDir}/resources/main/install.xml")
