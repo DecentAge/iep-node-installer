@@ -1,0 +1,8 @@
+.cache
+.project
+.settings
+.classpath
+.git
+.gitignore
+.gitlab-ci.yml
+build-docker.sh

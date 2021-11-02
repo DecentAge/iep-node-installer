@@ -1,13 +1,18 @@
 #!/bin/sh
 
 export INSTALL_DIR=$(cd "$(dirname "$0")/.." && pwd -P);
+export JAVA_HOME=${INSTALL_DIR}/jre
+
+
 echo "INSTALL_DIR=${INSTALL_DIR}"
+echo "JAVA_HOME=${JAVA_HOME}"
+
 echo "***********************************************"
 echo "** DEPRECATED: Use 'run.sh --desktop' instead **"
 echo "***********************************************"
 sleep 1
-if [ -e ~/.xin/xin.pid ]; then
-    PID=`cat ~/.xin/xin.pid`
+if [ -e ~/.xin/%{xin.app.name}.pid ]; then
+    PID=`cat ~/.xin/%{xin.app.name}.pid`
     ps -p $PID > /dev/null
     STATUS=$?
     if [ $STATUS -eq 0 ]; then
@@ -21,6 +26,6 @@ cd "${INSTALL_DIR}"
 mkdir -p logs
 echo "Starting node in ${PWD}"
 export IEP_NODE_OPTS="-Dxin.runtime.mode=desktop"
-nohup bin/iep-node  > logs/console.log 2>&1 &
-echo $! > ~/.xin/xin.pid
+nohup bin/%{xin.app.name}  > logs/console.log 2>&1 &
+echo $! > ~/.xin/%{xin.app.name}.pid
 cd - > /dev/null

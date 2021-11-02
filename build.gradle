@@ -1,6 +1,23 @@
-apply plugin: 'java'
-apply plugin: 'com.bmuschko.izpack'
-apply plugin: 'eclipse'
+buildscript {
+    repositories {
+        gradlePluginPortal()
+    }
+
+    dependencies {
+        classpath 'com.bmuschko:gradle-izpack-plugin:3.2'
+    }
+}
+
+plugins {
+	id 'java'
+	id 'eclipse'
+	id 'com.bmuschko.izpack' version '3.2'
+	id "de.undercouch.download" version "4.1.2"
+}
+
+ext {
+    downloadFolder = file("${buildDir}/downloads")
+}
 
 eclipse {
     classpath {
@@ -11,16 +28,6 @@ eclipse {
 
 repositories {
     jcenter()
-}
-
-buildscript {
-    repositories {
-        gradlePluginPortal()
-    }
-
-    dependencies {
-        classpath 'com.bmuschko:gradle-izpack-plugin:3.2'
-    }
 }
 
 sourceCompatibility = 11
@@ -39,57 +46,98 @@ dependencies {
 }
 
 
-task unzipIzpackUtils(type: Copy) {
-    print "FILE=" + configurations.izpackUtils.singleFile
+izpack {
+    baseDir = file("${buildDir}/resources/main")
+    installFile = file("${buildDir}/resources/main/install.xml")
+    outputFile = file("${buildDir}/distributions/iep-node-installer.jar")
+    compression = 'default'
+    compressionLevel = 9
+    appProperties = ["iep.node.path": file("../iep-node")]
+}
+
+
+task unpackSharedLibs(type: Copy) {
     def outputDir = file("${buildDir}/izpack-utils")
     from zipTree(configurations.izpackUtils.singleFile)
     into outputDir
 }
 
-izpack {
-    baseDir = file("./izpack")
-    installFile = file('./izpack/install.xml')
-    //outputFile = file("$buildDir/distributions/iep-node-${version}-installer.jar")
-    outputFile = file("${buildDir}/distributions/iep-node-installer.jar")
-    compression = 'deflate'
-    compressionLevel = 9
-    appProperties = ["iep.node.path": file("../iep-node")]
-    //appProperties = ['app.group': 'Griffon', 'app.name': 'griffon', 'app.title': 'Griffon',
-    //                 'app.version': version, 'app.subpath': "Griffon-$version"]
+
+task downloadLinuxLibs(type: Download) {
+	downloadFolder.mkdirs()
+    src([
+        'https://phoenixnap.dl.sourceforge.net/project/dos2unix/dos2unix/7.3.3/dos2unix-7.3.3.tar.gz',
+        'https://builds.openlogic.com/downloadJDK/openlogic-openjdk-jre/11.0.8+10/openlogic-openjdk-jre-11.0.8+10-linux-x64.tar.gz'
+    ])
+    dest downloadFolder
+    overwrite false
+} 
+
+/*task unpackLinuxLibs(dependsOn: downloadLinuxLibs, type: Copy) {
+	fileTree(dir: "${buildDir}/downloads").include('*.tar.gz').each { tarFile ->
+	   copy {
+	      println "Untar $tarFile.name"
+	      def name = tarFile.name - '.tar.gz'
+	      from tarTree("${buildDir}/downloads/${tarFile.name}")
+	      into "${buildDir}/downloads"       
+	   }
+	}
 }
+*/
+
+task downloadMacLibs(type: Download) {
+	downloadFolder.mkdirs()
+    src([
+        'https://builds.openlogic.com/downloadJDK/openlogic-openjdk-jre/11.0.8+10/openlogic-openjdk-jre-11.0.8+10-mac-x64.zip'
+    ])
+    dest downloadFolder
+    overwrite false
+} 
 
 
-task buildInstallerApp() {
+task downloadWindowsLibs(type: Download) {
+	downloadFolder.mkdirs()
+    src([
+        'https://github.com/winsw/winsw/releases/download/v2.11.0/WinSW-x64.exe',
+        'https://builds.openlogic.com/downloadJDK/openlogic-openjdk-jre/11.0.8+10/openlogic-openjdk-jre-11.0.8+10-windows-x64.zip'
+    ])
+    dest downloadFolder
+    overwrite false
+} 
+
+
+task createMacInstaller(dependsOn: downloadMacLibs) {
   doLast {
      exec {
-          executable "./izpack/build-app.sh"
+     	  workingDir "${buildDir}/resources/main"
+          executable "${buildDir}/resources/main/create-mac-pkg.sh"
       }
   }
 }
 
-task buildInstallerRunner() {
+task createLinuxInstaller(dependsOn: downloadLinuxLibs) {
   doLast {
      exec {
-          executable "./izpack/build-run.sh"
+     	  workingDir "${buildDir}/resources/main"
+          executable "${buildDir}/resources/main/create-linux-pkg.sh"
       }
   }
 }
 
-task buildInstallerExe() {
+task createWindowsInstaller(dependsOn: downloadWindowsLibs) {
   doLast {
      exec {
-          executable "./izpack/build-exe.sh"
+          workingDir "${buildDir}/resources/main"
+          executable "${buildDir}/resources/main/create-windows-pkg.sh"
       }
   }
 }
-
 tasks.register('createInstallers')
 
-unzipIzpackUtils.dependsOn build
-izPackCreateInstaller.dependsOn unzipIzpackUtils
-buildInstallerApp.dependsOn izPackCreateInstaller
-buildInstallerRunner.dependsOn izPackCreateInstaller
-buildInstallerExe.dependsOn izPackCreateInstaller
-
-createInstallers.dependsOn(buildInstallerApp,buildInstallerRunner,buildInstallerExe)
-
+//build.dependsOn unpackSharedLibs
+unpackSharedLibs.dependsOn assemble
+izPackCreateInstaller.dependsOn unpackSharedLibs
+createMacInstaller.dependsOn izPackCreateInstaller
+createLinuxInstaller.dependsOn izPackCreateInstaller
+createWindowsInstaller.dependsOn izPackCreateInstaller
+createInstallers.dependsOn(createMacInstaller,createLinuxInstaller,createWindowsInstaller)

@@ -10,7 +10,7 @@
     
     <job name="Stoping node" condition="xin.installer.stopBeforeInstallation">
       <executefile name="$INSTALL_PATH/bin/stop.bat"/>
-      <os family="unix"/>
+      <os family="windows"/>
     </job>    
     
    <!-- <job name="Starting node" condition="xin.installer.startAfterInstallation">

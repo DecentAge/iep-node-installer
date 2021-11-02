@@ -5,16 +5,17 @@
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="http://izpack.org/schema/shortcuts http://izpack.org/schema/5.0/izpack-shortcuts-5.0.xsd">
 
-    <programGroup defaultName="XIN" location="applications" iconFile="$INSTALL_PATH/html/www/assets/images/logo_modal.png"/>
+    <programGroup defaultName="XIN" location="applications" iconFile="$INSTALL_PATH/html/www/wallet/assets/images/logo_modal.png"/>
 
     <shortcut
-            name="Start XIN (iep-node)"
+            name="Start XIN"
             programGroup="yes"
             desktop="yes"
-            target="$INSTALL_PATH/bin/start.sh"
+            target="$INSTALL_PATH/bin/iep-node.exe"
+            commandLine="start iep-node.xml"
             workingDirectory="$INSTALL_PATH"
             description="Start Xin"
-            iconFile="$INSTALL_PATH/html/www/assets/images/logo_modal.png"
+            iconFile="$INSTALL_PATH/html/www/wallet/assets/images/logo_modal.png"
             type="Application"
             encoding="UTF-8"
             categories="Application;Network;"
@@ -22,13 +23,14 @@
     </shortcut>
 
     <shortcut
-            name="Stop XIN (iep-node)"
+            name="Stop XIN"
             programGroup="yes"
             desktop="yes"
             target="$INSTALL_PATH/bin/stop.sh"
+            commandLine="stop iep-node.xml"
             workingDirectory="$INSTALL_PATH"
             description="Shutdown Xin"
-            iconFile="$INSTALL_PATH/html/www/assets/images/logo_modal.png"
+            iconFile="$INSTALL_PATH/html/www/wallet/assets/images/logo_modal.png"
             type="Application"
             encoding="UTF-8"
             categories="Application;Network;"
@@ -36,18 +38,18 @@
     </shortcut>
 
     <shortcut
-            name="Uninstall XIN (iep-node)"
+            name="Uninstall XIN"
             programGroup="yes"
             desktop="no"
             target="java"
             commandLine="-jar &quot;$INSTALL_PATH/Uninstaller/uninstaller.jar&quot;"
-            iconFile="$INSTALL_PATH/html/www/assets/images/delete.png"
+            iconFile="$INSTALL_PATH/html/www/wallet/assets/images/delete.png"
             workingDirectory=""
             type="Application"
             encoding="UTF-8"
             categories="Application;Network;"
             createForAll="true"
-            description="Uninstall Xin">
+            description="Uninstall XIN">
     </shortcut>
 
 

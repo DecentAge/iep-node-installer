@@ -34,7 +34,7 @@
 		
 		<field type="staticText" align="left" txt="The admin password used to access restricted node funcitonalities"/>
 
-		<field type="password" align="left" variable="ADMIN_PASSWORD" >
+		<field type="password" align="left" variable="xin.adminPassword" >
 			<spec allowEmptyValue="false" txt="The admin password used to access restricted node funcitonalities" set="Wuff1980_s7">
 				<pwd txt="The Password:" size="18" set="" />
 				<pwd txt="Retype Password:" size="18" set="" />

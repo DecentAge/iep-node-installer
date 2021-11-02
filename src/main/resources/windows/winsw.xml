@@ -1,0 +1,12 @@
+<service>
+  <id>${xin.app.name}</id>
+  <name>XIN node service</name>
+  <description>The windows service used for the XIN node</description>
+  <executable>${INSTALL_PATH}\jre\bin\java</executable>
+  <arguments>-Duser.home=${USER_HOME} -Dxin.runtime.mode=desktop -Dnxt.redirect.system.out=true -Dnxt.redirect.system.err=true -jar "${INSTALL_PATH}\lib\${xin.app.name}.jar" -server</arguments>
+  <logmode>rotate</logmode>
+  <stoptimeout>50 sec</stoptimeout>
+  <stopparentprocessfirst>true</stopparentprocessfirst>
+  <workingdirectory>${INSTALL_PATH}</workingdirectory>
+  <logpath>${USER_HOME}\.xin\logs</logpath>
+</service>
