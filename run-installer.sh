@@ -3,7 +3,7 @@ set -o errexit
 set -o nounset
 
 $HOME/XIN/bin/stop.sh || echo "Could not stop running node"
-# pkill -9 "xin.runtime.mode=desktop"
+pkill -9 -f "xin.runtime.mode=desktop"
 rm -rf $HOME/XIN;
 rm -rf $HOME/.xin;
 
