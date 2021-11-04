@@ -2,8 +2,9 @@
 set -o errexit
 set -o nounset
 
-$HOME/XIN/bin/stop.sh || echo "Could not stop running node"
-pkill -9 -f "xin.runtime.mode=desktop"
+$HOME/XIN/bin/stop.sh 2>/dev/null || (pkill -9 -ef "xin.runtime.mode=desktop" ||  echo "Could not kill running node")
+
+
 rm -rf $HOME/XIN;
 rm -rf $HOME/.xin;
 

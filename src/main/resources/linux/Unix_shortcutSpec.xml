@@ -41,7 +41,7 @@
             name="Uninstall XIN"
             programGroup="yes"
             desktop="no"
-            target="java"
+            target="$INSTALL_PATH/jre/bin/java.exe"
             commandLine="-jar &quot;$INSTALL_PATH/Uninstaller/uninstaller.jar&quot;"
             iconFile="$INSTALL_PATH/html/www/wallet/assets/images/delete.png"
             workingDirectory=""

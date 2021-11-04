@@ -8,6 +8,6 @@ ECHO JAVA_HOME=%JAVA_HOME%
 setlocal
 
 cd %INSTALL_DIR%
-SET "IEP_NODE_OPTS=-Dxin.runtime.mode=desktop -Duser.home=%USERPROFILE%"
+SET IEP_NODE_OPTS=--module-path "%INSTALL_DIR%\javafx-sdk\lib" --add-modules javafx.controls,javafx.web --add-exports javafx.web/com.sun.javafx.webkit=ALL-UNNAMED -Dxin.runtime.mode=desktop -Duser.home=%USERPROFILE%
 start bin\iep-node
 endlocal

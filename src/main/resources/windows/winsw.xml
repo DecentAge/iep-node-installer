@@ -3,7 +3,7 @@
   <name>XIN node service</name>
   <description>The windows service used for the XIN node</description>
   <executable>${INSTALL_PATH}\jre\bin\java</executable>
-  <arguments>-Duser.home=${USER_HOME} -Dxin.runtime.mode=desktop -Dnxt.redirect.system.out=true -Dnxt.redirect.system.err=true -jar "${INSTALL_PATH}\lib\${xin.app.name}.jar" -server</arguments>
+  <arguments>--module-path "${INSTALL_PATH}\javafx-sdk\lib" --add-modules javafx.controls,javafx.web --add-exports javafx.web/com.sun.javafx.webkit=ALL-UNNAMED -Duser.home=${USER_HOME} -Dxin.runtime.mode=desktop -Dnxt.redirect.system.out=true -Dnxt.redirect.system.err=true -jar "${INSTALL_PATH}\lib\${xin.app.name}.jar"</arguments>
   <logmode>rotate</logmode>
   <stoptimeout>50 sec</stoptimeout>
   <stopparentprocessfirst>true</stopparentprocessfirst>

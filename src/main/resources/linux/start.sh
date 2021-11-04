@@ -25,7 +25,7 @@ mkdir -p ~/.xin/
 cd "${INSTALL_DIR}"
 mkdir -p logs
 echo "Starting node in ${PWD}"
-export IEP_NODE_OPTS="-Dxin.runtime.mode=desktop"
+export IEP_NODE_OPTS="--module-path ${INSTALL_DIR}/javafx-sdk/lib --add-modules javafx.controls,javafx.web --add-exports javafx.web/com.sun.javafx.webkit=ALL-UNNAMED -Dxin.runtime.mode=desktop"
 nohup bin/%{xin.app.name}  > logs/console.log 2>&1 &
 echo $! > ~/.xin/%{xin.app.name}.pid
 cd - > /dev/null

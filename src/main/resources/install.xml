@@ -1,42 +1,55 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <izpack:installation version="5.0" xmlns:izpack="http://izpack.org/schema/installation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://izpack.org/schema/installation http://izpack.org/schema/5.0/izpack-installation-5.0.xsd">
+
+
+
 	<properties>
 		<property file="@{iep.node.path}/src/main/resources/system.properties" prefix="iep.props" />
 	</properties>
+	<logging>
+		<log-file pattern="${USER_HOME}/.xin/logs/installation.log" append="true" mkdirs="true" level="INFO" />
+	</logging>
 	<info>
 		<appname>XIN</appname>
 		<appversion>@{iep.props.xin.version}</appversion>
 		<url>https://infinity-economics.io</url>
-		<run-privileged condition="izpack.windowsinstall" />
+		<run-privileged condition="izpack.windowsinstall" uninstaller="true" />
 		<uninstaller write="yes"/>
 		<javaversion>11</javaversion>
-		<requiresjdk>yes</requiresjdk>
+		<!-- <requiresjdk>yes</requiresjdk> -->
 	</info>
 
-	<dynamicvariables>
-		<variable name="xin.installer.packInstallCompleted" value="false" checkonce="false" />
-	</dynamicvariables>
-
 	<variables>
+		<variable name="xin.target.os" value="@{iep.target.os}" />
 		<variable name="xin.app.name" value="iep-node" />
 		<variable name="xin.installer.name" value="iep-node-installer" />
 		<variable name="build.dir" value="../../" />
 		<variable name="build.downloadsDir" value="../../downloads" />
 		<variable name="build.bundleJDKVersion" value="11.0.8+10" />
+		<variable name="build.bundleJFXVersion" value="17.0.1" />
 		<variable name="DesktopShortcutCheckboxEnabled" value="true" />
 		<variable name="TargetPanel.dir.mac" value="/Applications/xin.app" />
-
 	</variables>
-	<logging>
-		<log-file pattern="${USER_HOME}/.xin/logs/installation.log" append="true" mkdirs="true" level="INFO" />
-	</logging>
+
 	<conditions>
 		<condition type="exists" id="xin.installer.stopBeforeInstallation">
 			<file>$INSTALL_PATH/bin/stop.sh</file>
 		</condition>
 		<condition type="variable" id="xin.installer.startAfterInstallation">
 			<name>xin.installer.startAfterInstallation</name>
-			<value>true</value>
+			<value>true</value>		
+		</condition>
+		<condition type="variable" id="xin.target.os.isWindows">
+			<name>xin.target.os</name>
+			<value>windows</value>
+		</condition>
+		<condition type="variable" id="xin.target.os.isLinux">
+			<name>xin.target.os</name>
+			<value>linux</value>
+		</condition>
+		<condition type="variable" id="xin.target.os.isMac">
+			<name>xin.target.os</name>
+			<value>mac</value>
 		</condition>
 	</conditions>
 
@@ -141,7 +154,7 @@
 		<res id="InfoPanel.info" src="@{iep.node.path}/CHANGELOG-@{iep.props.xin.version}.md" parse="yes" />
 		<res id="LicencePanel.licence" src="@{iep.node.path}/LICENSE.txt" />
 		<res id="Installer.image" src="images/installer_left_pane.png" />
-		<res id="shortcutSpec.xml" src="windows/shortcutSpec.xml" />
+		<res id="shortcutSpec.xml" src="windows/shortcutSpec_service.xml" />
 		<res id="Unix_shortcutSpec.xml" src="linux/Unix_shortcutSpec.xml" />
 		<res id="RegistrySpec.xml" src="windows/RegistrySpec.xml" />
 		<res id="installer.langsel.img" src="images/logo.png" />
@@ -155,33 +168,41 @@
 		<panel classname="TargetPanel" />
 		<!-- <panel classname="ProcessPanel" /> -->
 		<panel classname="UserInputPanel" id="iep.config.panel" />
-		<!-- <actions> <action stage="postvalidate" classname="xin.installer.UpdateNodePropertiesAction" /> </actions> </panel> -->
 		<panel classname="InstallPanel" />
 		<panel classname="ShortcutPanel" />
 		<panel classname="SimpleFinishPanel" allowClose="true" />
 	</panels>
 
 	<packs>
-	
+<!--	
 		<pack name="server.jre.windows" required="yes" os="windows">
 			<description>OpenLogic JRE</description>
 			<os family="windows" />
-			<file src="${build.downloadsDir}/openlogic-openjdk-jre-${build.bundleJDKVersion}-windows-x64.zip" targetdir="${INSTALL_PATH}/jre" unpack="true" override="true">
-				<archivefileset dir="openlogic-openjdk-jre-${build.bundleJDKVersion}-win-x64"/>
+			<file src="${build.downloadsDir}/OpenJDK11U-jre_x64_windows_hotspot_11.0.12_7.zip" targetdir="${INSTALL_PATH}/jre" unpack="true" override="true">
+				<archivefileset dir="jdk-11.0.12+7-jre" />
 			</file>
 			<executable targetfile="${INSTALL_PATH}/jre/bin/java" failure="abort" keep="true"/>
+			
+			<file src="${build.downloadsDir}/openjfx-${build.bundleJFXVersion}_windows-x64_bin-sdk.zip" targetdir="${INSTALL_PATH}/javafx-sdk" unpack="true" override="true">
+				<archivefileset dir="javafx-sdk-${build.bundleJFXVersion}"/>
+			</file>		
+					
 		</pack>
-		
+ -->		
 		<pack name="server.jre.linux" required="yes" os="unix">
 			<description>OpenLogic JRE</description>
 			<os family="unix"/>
-			<file src="${build.downloadsDir}/openlogic-openjdk-jre-11.0.8+10-linux-x64.tar.gz" targetdir="${INSTALL_PATH}/jre" unpack="true" override="true">
-				<archivefileset dir="openlogic-openjdk-jre-11.0.8+10-linux-x64"/>
+			<file src="${build.downloadsDir}/OpenJDK11U-jre_x64_linux_hotspot_11.0.12_7.tar.gz" targetdir="${INSTALL_PATH}/jre" unpack="true" override="true">
+				<archivefileset dir="jdk-11.0.12+7-jre" />
 			</file>
 			<executable targetfile="${INSTALL_PATH}/jre/bin/java" failure="abort" keep="true"/>
 
-		</pack>	
-	
+			<file src="${build.downloadsDir}/openjfx-${build.bundleJFXVersion}_linux-x64_bin-sdk.zip" targetdir="${INSTALL_PATH}/javafx-sdk" unpack="true" override="true">
+				<archivefileset dir="javafx-sdk-${build.bundleJFXVersion}"/>
+			</file>		
+
+		</pack>
+
 		<pack name="server" required="yes">
 			<description>Common Server Files</description>
 			<file src="@{iep.node.path}/build/${xin.app.name}.zip" targetdir="${INSTALL_PATH}" unpack="true" override="true">
@@ -189,7 +210,6 @@
 					<exclude name="conf/**" />
 				</archivefileset>
 			</file>
-			
 			<singlefile src="@{iep.node.path}/conf/custom.properties" target="${USER_HOME}/.xin/conf/custom.properties" override="true" />
 			<singlefile src="@{iep.node.path}/conf/templates/installer.properties" target="${USER_HOME}/.xin/conf/installer.properties" override="true" />
 			<singlefile src="@{iep.node.path}/src/main/resources/log4j.properties" target="${USER_HOME}/.xin/conf/log4j.properties" override="true" />
@@ -199,12 +219,10 @@
 			<parsable targetfile="${USER_HOME}/.xin/conf/installer.properties" type="plain" />
 
 		</pack>
-		
-		<pack name="server.unix" os="unix" required="yes" hidden="true">
+ 
+		<pack name="server.unix" os="unix" required="yes">
 			<description>Unix Specific Resources</description>
 			<os family="unix" />
-
-			<executable targetfile="${INSTALL_PATH}/bin/iep-node" />
 
 			<executable targetfile="${INSTALL_PATH}/bin/${xin.app.name}" />
 			<executable targetfile="${INSTALL_PATH}/bin/dev" />
@@ -217,15 +235,10 @@
 			<parsable targetfile="${INSTALL_PATH}/bin/stop.sh" type="shell" />
 			<executable targetfile="${INSTALL_PATH}/bin/stop.sh" stage="uninstall"/>
 		</pack>
-
-
-
-
-		<pack name="server.windows" os="windows" required="yes" hidden="true">
+<!--
+		<pack name="server.windows" os="windows" required="yes">
 			<description>Windows Specific Resources</description>
 			<os family="windows" />
-		
-			<!-- 
 			<singlefile src="windows/winsw.xml" target="${INSTALL_PATH}/bin/${xin.app.name}.xml" override="true" />
 			<parsable targetfile="${INSTALL_PATH}/bin/${xin.app.name}.xml" type="xml" />
 		
@@ -256,20 +269,16 @@
 					<arg value="iep-node.xml"/>
 				</args>
 			</executable>
-		 	-->
-
-			<executable targetfile="${INSTALL_PATH}/bin/iep-node.bat" />
 
 			<executable targetfile="${INSTALL_PATH}/bin/${xin.app.name}.bat" />
 			<executable targetfile="${INSTALL_PATH}/bin/dev.bat" />
 			
 			<file src="windows/start.bat" targetdir="${INSTALL_PATH}/bin" override="true" />
-			<executable targetfile="${INSTALL_PATH}/bin/start.bat" />
+			<executable targetfile="${INSTALL_PATH}/bin/start.bat" stage="never" keep="true" failure="warn"/>
 
 			<file src="windows/stop.bat" targetdir="${INSTALL_PATH}/bin" override="true" />
-			<executable targetfile="${INSTALL_PATH}/bin/stop.bat" />
+			<executable targetfile="${INSTALL_PATH}/bin/stop.bat" stage="never" keep="true" failure="ignore"/>
 		</pack>
-
-
+ -->
 	</packs>
 </izpack:installation>

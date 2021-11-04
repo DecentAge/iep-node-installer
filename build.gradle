@@ -17,6 +17,9 @@ plugins {
 
 ext {
     downloadFolder = file("${buildDir}/downloads")
+    jreBundleVersion="11.0.12+7"
+    jreBundleEscapedVersion=jreBundleVersion.replaceAll('\\+','_')
+    openJFXVersion="17.0.1"
 }
 
 eclipse {
@@ -38,7 +41,6 @@ configurations {
     transitive = false
   }
 }
-
 dependencies {
     izpack 'org.bidib.org.codehaus.izpack:izpack-ant:5.2.0.M2'
     izpackUtils 'org.bidib.org.codehaus.izpack:izpack-wrapper:5.2.0.M2'
@@ -51,26 +53,34 @@ izpack {
     outputFile = file("${buildDir}/distributions/iep-node-installer.jar")
     compression = 'default'
     compressionLevel = 9
-    appProperties = ["iep.node.path": file("../iep-node")]
+    appProperties = ["iep.node.path": file("../iep-node"), 'iep.target.os' : 'windows']
 }
 
-
-task unpackSharedLibs(type: Copy) {
+task unpackSharedLibs(dependsOn: assemble, type: Copy) {
     def outputDir = file("${buildDir}/izpack-utils")
     from zipTree(configurations.izpackUtils.singleFile)
     into outputDir
 }
 
+task izPackCreateInstallerTrigger(dependsOn: unpackSharedLibs) {
+	inputs.file file("../iep-node/build/iep-node.zip")
+}
 
-task downloadLinuxLibs(type: Download) {
+izPackCreateInstaller.dependsOn izPackCreateInstallerTrigger
+
+task downloadLinuxLibs(dependsOn: izPackCreateInstaller, type: Download) {
 	downloadFolder.mkdirs()
+	
+
     src([
-        'https://phoenixnap.dl.sourceforge.net/project/dos2unix/dos2unix/7.3.3/dos2unix-7.3.3.tar.gz',
-        'https://builds.openlogic.com/downloadJDK/openlogic-openjdk-jre/11.0.8+10/openlogic-openjdk-jre-11.0.8+10-linux-x64.tar.gz'
+        "https://phoenixnap.dl.sourceforge.net/project/dos2unix/dos2unix/7.3.3/dos2unix-7.3.3.tar.gz",
+        "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-${jreBundleVersion}/OpenJDK11U-jre_x64_linux_hotspot_${jreBundleEscapedVersion}.tar.gz",
+        "https://download2.gluonhq.com/openjfx/${openJFXVersion}/openjfx-${openJFXVersion}_linux-x64_bin-sdk.zip"
     ])
+
     dest downloadFolder
     overwrite false
-} 
+}
 
 /*task unpackLinuxLibs(dependsOn: downloadLinuxLibs, type: Copy) {
 	fileTree(dir: "${buildDir}/downloads").include('*.tar.gz').each { tarFile ->
@@ -81,28 +91,34 @@ task downloadLinuxLibs(type: Download) {
 	      into "${buildDir}/downloads"       
 	   }
 	}
+}*/
+
+task downloadMacLibs(dependsOn: izPackCreateInstaller, type: Download) {
+	downloadFolder.mkdirs()
+    src([
+        "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-${jreBundleVersion}/OpenJDK11U-jre_x64_mac_hotspot_${jreBundleEscapedVersion}.tar.gz",
+        "https://download2.gluonhq.com/openjfx/${openJFXVersion}/openjfx-${openJFXVersion}_osx-x64_bin-sdk.zip"
+    ])
+    dest downloadFolder
+    overwrite false
+} 
+
+task downloadWindowsLibs(dependsOn: izPackCreateInstaller, type: Download) {
+	downloadFolder.mkdirs()
+    src([
+        "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-${jreBundleVersion}/OpenJDK11U-jre_x64_windows_hotspot_${jreBundleEscapedVersion}.zip",
+        "https://github.com/winsw/winsw/releases/download/v2.11.0/WinSW-x64.exe",
+        "https://download2.gluonhq.com/openjfx/${openJFXVersion}/openjfx-${openJFXVersion}_windows-x64_bin-sdk.zip"
+    ])
+    dest downloadFolder
+    overwrite false
+} 
+
+task unzipWindowsLibs(dependsOn: downloadWindowsLibs, type: Copy) {
+  delete "${buildDir}/downloads/OpenJDK11U-jre_x64_windows_hotspot_${jreBundleEscapedVersion}"
+  from zipTree("${buildDir}/downloads/OpenJDK11U-jre_x64_windows_hotspot_${jreBundleEscapedVersion}.zip")
+  into "${buildDir}/downloads"
 }
-*/
-
-task downloadMacLibs(type: Download) {
-	downloadFolder.mkdirs()
-    src([
-        'https://builds.openlogic.com/downloadJDK/openlogic-openjdk-jre/11.0.8+10/openlogic-openjdk-jre-11.0.8+10-mac-x64.zip'
-    ])
-    dest downloadFolder
-    overwrite false
-} 
-
-
-task downloadWindowsLibs(type: Download) {
-	downloadFolder.mkdirs()
-    src([
-        'https://github.com/winsw/winsw/releases/download/v2.11.0/WinSW-x64.exe',
-        'https://builds.openlogic.com/downloadJDK/openlogic-openjdk-jre/11.0.8+10/openlogic-openjdk-jre-11.0.8+10-windows-x64.zip'
-    ])
-    dest downloadFolder
-    overwrite false
-} 
 
 
 task createMacInstaller(dependsOn: downloadMacLibs) {
@@ -123,7 +139,7 @@ task createLinuxInstaller(dependsOn: downloadLinuxLibs) {
   }
 }
 
-task createWindowsInstaller(dependsOn: downloadWindowsLibs) {
+task createWindowsInstaller(dependsOn: unzipWindowsLibs) {
   doLast {
      exec {
           workingDir "${buildDir}/resources/main"
@@ -131,12 +147,7 @@ task createWindowsInstaller(dependsOn: downloadWindowsLibs) {
       }
   }
 }
-tasks.register('createInstallers')
 
-//build.dependsOn unpackSharedLibs
-unpackSharedLibs.dependsOn assemble
-izPackCreateInstaller.dependsOn unpackSharedLibs
-createMacInstaller.dependsOn izPackCreateInstaller
-createLinuxInstaller.dependsOn izPackCreateInstaller
-createWindowsInstaller.dependsOn izPackCreateInstaller
-createInstallers.dependsOn(createMacInstaller,createLinuxInstaller,createWindowsInstaller)
+task createInstallers(dependsOn: ['createMacInstaller', 'createLinuxInstaller', 'createWindowsInstaller']) {
+
+}

@@ -4,7 +4,7 @@
 	<panel id="iep.config.panel">
 		<field type="title" txt="Infinity Economics Node Config" align="left"/>
 
-		<field type="radio" variable="target.chain">
+		<field type="radio" variable="target.chain" readonly="true">
 			<description txt="Target chain/environment" />
 			<spec>
 				<choice txt="TESTNET" id="target.chain.tetsnet" value="mainnet" set="true" />
@@ -13,11 +13,11 @@
 		</field>
 
 
-		<field type="check" variable="setup.add.lightwallet">
+		<field type="check" variable="setup.add.lightwallet" readonly="true">
 			<spec txt="Start as light wallet" id="setup.add.lightwallet" true="on" false="off" set="false" />
 		</field>
 
-
+		<!-- 
 		<field type="check" variable="setup.download.snapshot">
 			<spec txt="Download the latest snapshot of the blockchain to avoid having to sync the node" id="setup.add.lightwallet" true="on" false="off" set="false" />
 		</field>
@@ -25,13 +25,13 @@
 		<field type="divider" />
 
 		<field type="check" variable="xin.installer.startAfterInstallation" >
-			<!-- <description id="description.start.after.installation" txt="This is a description for a check box" /> -->
+			
 			<spec txt="Start XIN node after installation" true="true" false="false" set="false" />
 		</field>
 
 		<field type="space" />
 		<field type="divider" />
-		
+		-->
 		<field type="staticText" align="left" txt="The admin password used to access restricted node funcitonalities"/>
 
 		<field type="password" align="left" variable="xin.adminPassword" >
@@ -44,9 +44,5 @@
 				<param name="pattern" value="^(?=[a-zA-Z])(?=.*[0-9])(?=.*[#@!$_])(?=.*[A-Z])(?=.*[a-z])(?!.*[^a-zA-Z0-9#@!$_])(?!.*\s).{8,20}$" />
 			</validator>
 		</field>
-
-
-		<field type="staticText" align="left" txt="The test"/>
-
 	</panel>
 </izpack:userinput>
