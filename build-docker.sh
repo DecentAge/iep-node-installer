@@ -15,4 +15,4 @@ docker run --rm -u gradle \
 -v gradle_cache:/home/gradle/.gradle \
 -w /home/gradle/iep-node-installer \
 gradle:6.9-jdk11-alpine \
-/bin/sh -c "ls -alt /home/gradle/iep-node" && gradle createInstallers --no-daemon --build-cache
+gradle createInstallers --no-daemon --build-cache

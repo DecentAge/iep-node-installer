@@ -8,8 +8,8 @@ echo "BUILD_DIR=${BUILD_DIR}"
 cp -f  windows/7zz ${BUILD_DIR}/izpack-utils/utils/wrappers/izpack2exe
 chmod u+x ${BUILD_DIR}/izpack-utils/utils/wrappers/izpack2exe
 
-cp -f windows/7zSD.sfx ${BUILD_DIR}/izpack-utils/utils/wrappers/izpack2exe/7zS.sfx
-
+cp -f windows/7zS.sfx ${BUILD_DIR}/izpack-utils/utils/wrappers/izpack2exe/7zS.sfx
+#cp -f windows/izpack2exe.py ${BUILD_DIR}/izpack-utils/utils/wrappers/izpack2exe/izpack2exe.py
 
 (cd ${BUILD_DIR}/izpack-utils/utils/wrappers/izpack2exe && \
 python3 izpack2exe.py \
@@ -18,9 +18,5 @@ python3 izpack2exe.py \
 	--with-7z=${BUILD_DIR}/izpack-utils/utils/wrappers/izpack2exe/7zz \
 	--no-upx \
 	--name xin \
-	--with-jdk ${BUILD_DIR}/downloads/openlogic-openjdk-jre-11.0.8+10-win-x64)
-	
-#--with-upx=${PROJECT_DIR}/build/izpack-utils/utils/wrappers/izpack2exe/UPX \
-#--launch-args="-logfile /home/korax/git/iep-node-installer/iep-node-installer.log" \
-#--with-jdk=/home/korax/jre/openlogic-openjdk-jre-11.0.9.1+1-windows-x64)
-#--with-jdk=..\jdk
+	--with-jdk ${BUILD_DIR}/downloads/jdk-11.0.12+7-jre)
+#	--with-upx=${BUILD_DIR}/izpack-utils/utils/wrappers/izpack2exe/UPX)

@@ -8,7 +8,7 @@
     <programGroup defaultName="XIN" location="applications" iconFile="$INSTALL_PATH/html/www/wallet/assets/images/logo_modal.png"/>
 
     <shortcut
-            name="Start XIN"
+            name="Start IEP Node"
             programGroup="yes"
             desktop="yes"
             target="$INSTALL_PATH/bin/iep-node.exe"
@@ -23,7 +23,7 @@
     </shortcut>
 
     <shortcut
-            name="Stop XIN"
+            name="Stop IEP Node"
             programGroup="yes"
             desktop="yes"
             target="$INSTALL_PATH/bin/stop.sh"
@@ -38,10 +38,10 @@
     </shortcut>
 
     <shortcut
-            name="Uninstall XIN"
+            name="Uninstall IEP Node"
             programGroup="yes"
             desktop="no"
-            target="$INSTALL_PATH/jre/bin/java.exe"
+            target="$INSTALL_PATH/jre/bin/javaw.exe"
             commandLine="-jar &quot;$INSTALL_PATH/Uninstaller/uninstaller.jar&quot;"
             iconFile="$INSTALL_PATH/html/www/wallet/assets/images/delete.png"
             workingDirectory=""
@@ -49,7 +49,7 @@
             encoding="UTF-8"
             categories="Application;Network;"
             createForAll="true"
-            description="Uninstall XIN">
+            description="Uninstall IEP Node">
     </shortcut>
 
 

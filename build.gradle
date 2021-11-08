@@ -8,6 +8,8 @@ buildscript {
     }
 }
 
+
+
 plugins {
 	id 'java'
 	id 'eclipse'
@@ -56,17 +58,20 @@ izpack {
     appProperties = ["iep.node.path": file("../iep-node"), 'iep.target.os' : 'windows']
 }
 
-task unpackSharedLibs(dependsOn: assemble, type: Copy) {
+task unpackSharedLibs(dependsOn: jar, type: Copy) {
     def outputDir = file("${buildDir}/izpack-utils")
     from zipTree(configurations.izpackUtils.singleFile)
     into outputDir
 }
+
 
 task izPackCreateInstallerTrigger(dependsOn: unpackSharedLibs) {
 	inputs.file file("../iep-node/build/iep-node.zip")
 }
 
 izPackCreateInstaller.dependsOn izPackCreateInstallerTrigger
+
+
 
 task downloadLinuxLibs(dependsOn: izPackCreateInstaller, type: Download) {
 	downloadFolder.mkdirs()
@@ -81,6 +86,8 @@ task downloadLinuxLibs(dependsOn: izPackCreateInstaller, type: Download) {
     dest downloadFolder
     overwrite false
 }
+
+
 
 /*task unpackLinuxLibs(dependsOn: downloadLinuxLibs, type: Copy) {
 	fileTree(dir: "${buildDir}/downloads").include('*.tar.gz').each { tarFile ->

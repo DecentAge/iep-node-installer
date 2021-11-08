@@ -1,21 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<izpack:processing version="5.0"
-  xmlns:izpack="http://izpack.org/schema/processing" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://izpack.org/schema/processing http://izpack.org/schema/5.0/izpack-processing-5.0.xsd">
+<izpack:processing version="5.0" xmlns:izpack="http://izpack.org/schema/processing" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://izpack.org/schema/processing http://izpack.org/schema/5.0/izpack-processing-5.0.xsd">
 
-    <job name="Stoping node" condition="xin.installer.stopBeforeInstallation">
-      <executefile name="$INSTALL_PATH/bin/stop.sh"/>
-      <os family="unix"/>
-    </job>
-    
-    <job name="Stoping node" condition="xin.installer.stopBeforeInstallation">
-      <executefile name="$INSTALL_PATH/bin/stop.bat"/>
-      <os family="windows"/>
-    </job>    
-    
-   <!-- <job name="Starting node" condition="xin.installer.startAfterInstallation">
-      <executefile name="$INSTALL_PATH/bin/start.sh"/>
-      
-    </job>    
-    -->
+	<job name="Starting IEP Node" condition="xin.installer.startAfterInstallation">
+		<executefile name="$INSTALL_PATH\bin\start.bat" onError="ask" />
+		<os family="windows" />
+	</job>
+
+
+	<job name="Starting IEP Node" condition="xin.installer.startAfterInstallation">
+		<executefile name="$INSTALL_PATH/bin/start.sh" onError="ask" />
+		<os family="unix" />
+	</job>
+
 </izpack:processing>

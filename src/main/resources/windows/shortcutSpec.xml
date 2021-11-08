@@ -6,7 +6,7 @@
 	<defaultCurrentUser/>
 	<programGroup defaultName="XIN" location="startMenu"/>
 	<shortcut
-		name="Stop node (iep-node)"
+		name="Stop IEP Node"
 		target="$INSTALL_PATH\bin\stop.bat"
 		workingDirectory="$INSTALL_PATH"
         description="Stop node for Infinity Economics"
@@ -21,7 +21,7 @@
 	</shortcut>	
 	
 	<shortcut
-		name="Start XIN (iep-node)"
+		name="Start IEP Node"
 		target="$INSTALL_PATH\bin\start.bat"
 		workingDirectory="$INSTALL_PATH"
         description="Start node for Infinity Economics"
@@ -37,8 +37,8 @@
 	
 		
 	<shortcut
-		name="Uninstall XIN (iep-node)"
-		target="$INSTALL_PATH\jre\bin\java.exe"
+		name="Uninstall IEP Node"
+		target="$JAVA_HOME\bin\java.exe"
 		commandLine="-jar &quot;$INSTALL_PATH\Uninstaller\uninstaller.jar&quot;"
 		workingDirectory="$INSTALL_PATH"
         description="Uninstalls the node for Infinity Economics"

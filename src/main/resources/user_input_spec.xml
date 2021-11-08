@@ -23,15 +23,13 @@
 		</field>
 
 		<field type="divider" />
+		-->
+		<field type="space" />
 
 		<field type="check" variable="xin.installer.startAfterInstallation" >
-			
-			<spec txt="Start XIN node after installation" true="true" false="false" set="false" />
+			<spec txt="Start XIN node after installation" true="true" false="false" set="true" />
 		</field>
-
-		<field type="space" />
-		<field type="divider" />
-		-->
+		
 		<field type="staticText" align="left" txt="The admin password used to access restricted node funcitonalities"/>
 
 		<field type="password" align="left" variable="xin.adminPassword" >

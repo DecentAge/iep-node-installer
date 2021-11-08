@@ -6,7 +6,7 @@
 	<defaultCurrentUser/>
 	<programGroup defaultName="XIN" location="startMenu"/>
 	<shortcut
-		name="Stop node (iep-node)"
+		name="Stop IEP Node"
 		target="$INSTALL_PATH\bin\iep-node.exe"
 		commandLine="stop"
 		workingDirectory="$INSTALL_PATH"
@@ -22,7 +22,7 @@
 	</shortcut>	
 	
 	<shortcut
-		name="Start XIN (iep-node)"
+		name="Start IEP Node"
 		target="$INSTALL_PATH\bin\iep-node.exe"
 		commandLine="start"
 		workingDirectory="$INSTALL_PATH"
@@ -39,7 +39,7 @@
 	
 		
 	<shortcut
-		name="Uninstall XIN (iep-node)"
+		name="Uninstall IEP Node"
         target="$INSTALL_PATH\jre\bin\java.exe"
 		commandLine="-jar &quot;$INSTALL_PATH\Uninstaller\uninstaller.jar&quot;"
 		workingDirectory="$INSTALL_PATH"
