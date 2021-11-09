@@ -177,7 +177,7 @@
 	</panels>
 
 	<packs>
-
+<!-- 
 		<pack name="server.jre.windows" required="yes" os="windows">
 			<description>OpenLogic JRE</description>
 			<os family="windows" />
@@ -202,6 +202,20 @@
 				<archivefileset dir="javafx-sdk-${build.bundleJFXVersion}" />
 			</file>
 		</pack>
+ -->		
+		
+		<pack name="server.jre.mac" required="yes" os="mac">
+			<description>OpenLogic JRE</description>
+			<os family="mac" />
+			<file src="${build.downloadsDir}/OpenJDK11U-jre_x64_mac_hotspot_11.0.12_7.tar.gz" targetdir="${INSTALL_PATH}/jre" unpack="true" override="true">
+				<archivefileset dir="jdk-11.0.12+7-jre" />
+			</file>
+			<executable targetfile="${INSTALL_PATH}/jre/bin/java" failure="abort" keep="true" />
+			<file src="${build.downloadsDir}/openjfx-${build.bundleJFXVersion}_osx-x64_bin-sdk.zip" targetdir="${INSTALL_PATH}/javafx-sdk" unpack="true" override="true">
+				<archivefileset dir="javafx-sdk-${build.bundleJFXVersion}" />
+			</file>
+		</pack>		
+		
 		<pack name="server" required="yes">
 			<description>Common Server Files</description>
 			<file src="@{iep.node.path}/build/${xin.app.name}.zip" targetdir="${INSTALL_PATH}" unpack="true" override="true">
@@ -218,6 +232,21 @@
 			<parsable targetfile="${USER_HOME}/.xin/conf/installer.properties" type="plain" />
 
 		</pack>
+
+		<pack name="server.mac" os="mac" required="yes">
+			<description>Unix Specific Resources</description>
+			<os family="mac" />
+			<executable targetfile="${INSTALL_PATH}/bin/${xin.app.name}" />
+			<executable targetfile="${INSTALL_PATH}/bin/dev" />
+			<file src="linux/start.sh" targetdir="${INSTALL_PATH}/bin" override="true" />
+			<parsable targetfile="${INSTALL_PATH}/bin/start.sh" type="shell" />
+			<executable targetfile="${INSTALL_PATH}/bin/start.sh" stage="never" failure="warn" keep="true" />
+			<file src="linux/stop.sh" targetdir="${INSTALL_PATH}/bin" override="true" />
+			<parsable targetfile="${INSTALL_PATH}/bin/stop.sh" type="shell" />
+			<executable targetfile="${INSTALL_PATH}/bin/stop.sh" stage="uninstall" />
+		</pack>
+
+		<!-- 
 		<pack name="server.unix" os="unix" required="yes">
 			<description>Unix Specific Resources</description>
 			<os family="unix" />
@@ -230,11 +259,12 @@
 			<parsable targetfile="${INSTALL_PATH}/bin/stop.sh" type="shell" />
 			<executable targetfile="${INSTALL_PATH}/bin/stop.sh" stage="uninstall" />
 		</pack>
+
 		<pack name="server.windows" os="windows" required="yes">
 			<description>Windows Specific Resources</description>
 			<os family="windows" />
 			
-			<!--
+			======
 			<singlefile src="windows/winsw.xml" target="${INSTALL_PATH}/bin/${xin.app.name}.xml" override="true" />
 			<parsable targetfile="${INSTALL_PATH}/bin/${xin.app.name}.xml" type="xml" />
 			<executable targetfile="${INSTALL_PATH}/bin/${xin.app.name}.exe" stage="uninstall" keep="true" failure="warn">
@@ -262,7 +292,7 @@
 					<arg value="iep-node.xml" />
 				</args>
 			</executable>
-			-->
+			=====
 
 			<executable targetfile="${INSTALL_PATH}/bin/${xin.app.name}.bat" />
 			<executable targetfile="${INSTALL_PATH}/bin/dev.bat" />
@@ -272,6 +302,6 @@
 
 			<file src="windows/stop.bat" targetdir="${INSTALL_PATH}/bin" override="true" />
 			<executable targetfile="${INSTALL_PATH}/bin/stop.bat" stage="uninstall" keep="true" failure="ignore" />
-		</pack>
+		</pack> -->
 	</packs>
 </izpack:installation>
