@@ -7,26 +7,26 @@ echo "BUILD_DIR=${BUILD_DIR}"
 
 #rm -rf ${BUILD_DIR}/build/distributions/iep-node.app
 
-which java
-
+export MACVERSION="10.16.4"
 JAVA_HOME="$(cd $(dirname $(readlink -f $(which java)))/..; pwd)"
 echo JAVA_HOME=$JAVA_HOME
-$JAVA_HOME/bin/javapackager -deploy \
--outdir . \
--outfile ardor-client \
--name ardor-installer \
+
+javapackager -deploy -native dmg -v \
+-outdir "${BUILD_DIR}/distributions/dmg" \
+-outfile iep-node-installer-ws \
+-name iep-node-installer \
 -width 34 \
 -height 43 \
--native dmg \
--srcfiles iep-node.jar \
--appclass com.izforge.izpack.installer.bootstrap.Installer \
--v \
+-srcdir "${BUILD_DIR}/distributions" \
+-srcfiles iep-node-installer.jar \
+-appclass "com.izforge.izpack.installer.bootstrap.Installer" \
 -Bmac.category=Business \
--Bmac.CFBundleIdentifier=org.ardor.client.installer \
--Bmac.CFBundleName=Ardor-Installer \
+-Bmac.CFBundleIdentifier=xin.client.installer \
+-Bmac.CFBundleName=iep-node-installer \
 -Bmac.CFBundleVersion=${MACVERSION} \
 -BappVersion=${MACVERSION} \
--Bicon=installer/AppIcon.icns > installer/javapackager.log 2>&1
+-Bicon=installer/AppIcon.icns
+ 
 
 
 #(cd ${BUILD_DIR}/izpack-utils/utils/wrappers/izpack2app && \
