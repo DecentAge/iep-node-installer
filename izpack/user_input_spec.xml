@@ -7,8 +7,8 @@
 		<field type="radio" variable="iep.installer.targetEnv">
 			<description txt="Target chain/environment" />
 			<spec>
-				<choice txt="TESTNET" value="mainnet" set="true" />
-				<choice txt="MAINNET" value="testnet" />
+				<choice txt="TESTNET" value="testnet" set="true" />
+				<choice txt="MAINNET" value="mainnet" />
 			</spec>
 		</field>
 
