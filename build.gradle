@@ -64,7 +64,7 @@ izpack {
     baseDir = file("izpack")
     installFile = file("izpack/install.xml")
     outputFile = file("${buildDir}/distributions/iep-node-installer.jar")
-    compression = 'deflate'
+    compression = 'default'
     compressionLevel = 9
     appProperties = [
     "iep.node.path": file("../iep-node"), 
