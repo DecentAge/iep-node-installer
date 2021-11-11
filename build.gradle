@@ -87,7 +87,10 @@ task izPackCreateInstallerTrigger(dependsOn: unpackSharedLibs) {
 izPackCreateInstaller.dependsOn izPackCreateInstallerTrigger
 */
 
-task downloadLinuxLibs(dependsOn: ["unpackSharedLibs", "izPackCreateInstaller"], type: Download) {
+task downloadLinuxLibs(dependsOn: unpackSharedLibs, type: Download) {
+    doFirst {
+        println "Downloading linux libs...."
+    }
 	downloadFolder.mkdirs()
     src([
         "https://phoenixnap.dl.sourceforge.net/project/dos2unix/dos2unix/7.3.3/dos2unix-7.3.3.tar.gz",
@@ -110,7 +113,10 @@ task downloadLinuxLibs(dependsOn: ["unpackSharedLibs", "izPackCreateInstaller"],
 	}
 }*/
 
-task downloadMacLibs(dependsOn: ["unpackSharedLibs", "izPackCreateInstaller"], type: Download) {
+task downloadMacLibs(dependsOn: unpackSharedLibs, type: Download) {
+    doFirst {
+        println "Downloading mac libs...."
+    }
 	downloadFolder.mkdirs()
     src([
         "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-${envConfig.jreBundleVersion}/${envConfig.jreBundleFileName}",
@@ -134,7 +140,7 @@ task downloadWindowsLibs(dependsOn: unpackSharedLibs, type: Download) {
     overwrite false
 } 
 
-task unzipWindowsLibs(dependsOn: ["downloadWindowsLibs", "izPackCreateInstaller"], type: Copy) {
+task unzipWindowsLibs(dependsOn: ["downloadWindowsLibs"], type: Copy) {
   doFirst {
     println "Unzipping windows libs...."
   }
@@ -172,6 +178,8 @@ task createWindowsInstaller(dependsOn: unzipWindowsLibs) {
   }
 }
 
-//unzipWindowsLibs.dependsOn izPackCreateInstaller
-//downloadLinuxLibs.dependsOn izPackCreateInstaller
-//downloadMacLibs.dependsOn izPackCreateInstaller
+//jar.dependsOn izPackCreateInstaller
+
+createLinuxInstaller.dependsOn izPackCreateInstaller
+createWindowsInstaller.dependsOn izPackCreateInstaller
+createMacInstaller.dependsOn izPackCreateInstaller
