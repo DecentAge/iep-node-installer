@@ -99,6 +99,7 @@ task downloadLinuxLibs(dependsOn: unpackSharedLibs, type: Download) {
     ])
 
     dest downloadFolder
+    onlyIfModified true
     overwrite false
 }
 
@@ -123,6 +124,7 @@ task downloadMacLibs(dependsOn: unpackSharedLibs, type: Download) {
         "https://download2.gluonhq.com/openjfx/${envConfig.jfxBundleVersion}/${envConfig.jfxBundleFileName}"
     ])
     dest downloadFolder
+    onlyIfModified true
     overwrite false
 } 
 
@@ -137,6 +139,7 @@ task downloadWindowsLibs(dependsOn: unpackSharedLibs, type: Download) {
         "https://download2.gluonhq.com/openjfx/${envConfig.jfxBundleVersion}/${envConfig.jfxBundleFileName}"
     ])
     dest downloadFolder
+    onlyIfModified true
     overwrite false
 } 
 
