@@ -22,7 +22,7 @@
 		<variable name="iep.targetOs" value="@{iep.targetOs}" />
 		<variable name="xin.app.name" value="iep-node" />
 		<variable name="xin.installer.name" value="iep-node-installer" />
-		
+
 		<variable name="build.dir" value="../build" />
 		<variable name="build.downloadsDir" value="../build/downloads" />
 
@@ -65,14 +65,14 @@
 		<listener classname="RegistryUninstallerListener" stage="uninstall">
 			<os family="windows" />
 		</listener>
-		
+
 		<listener classname="xin.installer.InstallerListener" stage="install" />
 
-		<!--  <listener classname="xin.installer.PackFilterCompilerListener" stage="compiler" /> -->
-		
+		<!-- <listener classname="xin.installer.PackFilterCompilerListener" stage="compiler" /> -->
+
 		<listener classname="SummaryLoggerInstallerListener" stage="install" />
 	</listeners>
-	
+
 	<natives>
 		<native type="izpack" name="ShellLink.dll" uninstaller="true">
 			<os family="windows" />
@@ -170,7 +170,11 @@
 		<panel classname="CheckedHelloPanel" />
 		<panel classname="LicencePanel" />
 		<panel classname="TargetPanel" />
-		<panel classname="UserInputPanel" id="iep.config.panel" />
+		<panel classname="UserInputPanel" id="iep.config.panel" >
+			<actions>
+				<action stage="postvalidate" classname="xin.installer.UpdateNodePropertiesAction"/>
+			</actions>
+		</panel>
 		<panel classname="InstallPanel" />
 		<panel classname="ShortcutPanel" />
 		<panel classname="ProcessPanel" />
@@ -178,45 +182,23 @@
 	</panels>
 
 	<packs>
-<!-- 
-		<pack name="server.jre.windows" required="yes" os="windows">
-			<description>OpenLogic JRE</description>
-			<os family="windows" />
-			<file src="${build.downloadsDir}/OpenJDK11U-jre_x64_windows_hotspot_11.0.12_7.zip" targetdir="${INSTALL_PATH}/jre" unpack="true" override="true">
-				<archivefileset dir="jdk-11.0.12+7-jre" />
-			</file>
-			<executable targetfile="${INSTALL_PATH}/jre/bin/java" failure="abort" keep="true" />
+		<!-- <pack name="server.jre.windows" required="yes" os="windows"> <description>OpenLogic JRE</description> <os family="windows" /> <file src="${build.downloadsDir}/OpenJDK11U-jre_x64_windows_hotspot_11.0.12_7.zip" targetdir="${INSTALL_PATH}/jre" unpack="true" override="true"> <archivefileset dir="jdk-11.0.12+7-jre" /> 
+			</file> <executable targetfile="${INSTALL_PATH}/jre/bin/java" failure="abort" keep="true" /> <file src="${build.downloadsDir}/openjfx-${build.bundleJFXVersion}_windows-x64_bin-sdk.zip" targetdir="${INSTALL_PATH}/javafx-sdk" unpack="true" override="true"> <archivefileset dir="javafx-sdk-${build.bundleJFXVersion}" /> </file> 
+			</pack> <pack name="server.jre.unix" required="yes" os="unix"> <description>OpenLogic JRE</description> <os family="unix" /> <file src="${build.downloadsDir}/OpenJDK11U-jre_x64_linux_hotspot_11.0.12_7.tar.gz" targetdir="${INSTALL_PATH}/jre" unpack="true" override="true"> <archivefileset dir="jdk-11.0.12+7-jre" /> </file> 
+			<executable targetfile="${INSTALL_PATH}/jre/bin/java" failure="abort" keep="true" /> <file src="${build.downloadsDir}/openjfx-${build.bundleJFXVersion}_linux-x64_bin-sdk.zip" targetdir="${INSTALL_PATH}/javafx-sdk" unpack="true" override="true"> <archivefileset dir="javafx-sdk-${build.bundleJFXVersion}" /> </file> </pack> -->
 
-			<file src="${build.downloadsDir}/openjfx-${build.bundleJFXVersion}_windows-x64_bin-sdk.zip" targetdir="${INSTALL_PATH}/javafx-sdk" unpack="true" override="true">
-				<archivefileset dir="javafx-sdk-${build.bundleJFXVersion}" />
-			</file>
-
-		</pack>
-		<pack name="server.jre.unix" required="yes" os="unix">
-			<description>OpenLogic JRE</description>
-			<os family="unix" />
-			<file src="${build.downloadsDir}/OpenJDK11U-jre_x64_linux_hotspot_11.0.12_7.tar.gz" targetdir="${INSTALL_PATH}/jre" unpack="true" override="true">
-				<archivefileset dir="jdk-11.0.12+7-jre" />
-			</file>
-			<executable targetfile="${INSTALL_PATH}/jre/bin/java" failure="abort" keep="true" />
-			<file src="${build.downloadsDir}/openjfx-${build.bundleJFXVersion}_linux-x64_bin-sdk.zip" targetdir="${INSTALL_PATH}/javafx-sdk" unpack="true" override="true">
-				<archivefileset dir="javafx-sdk-${build.bundleJFXVersion}" />
-			</file>
-		</pack>
- -->		
-		
 		<pack name="server.jre" required="yes">
 			<description>OpenLogic JRE</description>
 			<file src="${build.downloadsDir}/${iep.jreBundleFileName}" targetdir="${INSTALL_PATH}/jre" unpack="true" override="true">
 				<archivefileset dir="jdk-${iep.jreBundleVersion}-jre" />
 			</file>
 			<executable targetfile="${INSTALL_PATH}/jre/bin/java" failure="abort" keep="true" />
-			
+
 			<file src="${build.downloadsDir}/${iep.jfxBundleFileName}" targetdir="${INSTALL_PATH}/javafx-sdk" unpack="true" override="true">
 				<archivefileset dir="javafx-sdk-${iep.jfxBundleVersion}" />
 			</file>
-		</pack>		
-		
+		</pack>
+
 		<pack name="server" required="yes">
 			<description>Common Server Files</description>
 			<file src="@{iep.node.path}/build/${xin.app.name}.zip" targetdir="${INSTALL_PATH}" unpack="true" override="true">
@@ -247,7 +229,7 @@
 			<executable targetfile="${INSTALL_PATH}/bin/stop.sh" stage="uninstall" />
 		</pack>
 
-	
+
 		<pack name="server.unix" os="unix" required="yes">
 			<description>Unix Specific Resources</description>
 			<os family="unix" />
@@ -265,36 +247,11 @@
 		<pack name="server.windows" os="windows" required="yes">
 			<description>Windows Specific Resources</description>
 			<os family="windows" />
-			
-			<!--
-			<singlefile src="windows/winsw.xml" target="${INSTALL_PATH}/bin/${xin.app.name}.xml" override="true" />
-			<parsable targetfile="${INSTALL_PATH}/bin/${xin.app.name}.xml" type="xml" />
-			<executable targetfile="${INSTALL_PATH}/bin/${xin.app.name}.exe" stage="uninstall" keep="true" failure="warn">
-				<args>
-					<arg value="stop" />
-					<arg value="iep-node.xml" />
-				</args>
-			</executable>
-			<executable targetfile="${INSTALL_PATH}/bin/${xin.app.name}.exe" stage="uninstall" keep="true" failure="warn">
-				<args>
-					<arg value="uninstall" />
-					<arg value="iep-node.xml" />
-				</args>
-			</executable>
-			<singlefile src="${build.downloadsDir}/WinSW-x64.exe" target="${INSTALL_PATH}/bin/${xin.app.name}.exe" override="true" />
-			<executable targetfile="${INSTALL_PATH}/bin/${xin.app.name}.exe" stage="postinstall" keep="true">
-				<args>
-					<arg value="install" />
-					<arg value="iep-node.xml" />
-				</args>
-			</executable>
-			<executable targetfile="${INSTALL_PATH}/bin/${xin.app.name}.exe" stage="postinstall" keep="true">
-				<args>
-					<arg value="start" />
-					<arg value="iep-node.xml" />
-				</args>
-			</executable>
-			 -->
+
+			<!-- <singlefile src="windows/winsw.xml" target="${INSTALL_PATH}/bin/${xin.app.name}.xml" override="true" /> <parsable targetfile="${INSTALL_PATH}/bin/${xin.app.name}.xml" type="xml" /> <executable targetfile="${INSTALL_PATH}/bin/${xin.app.name}.exe" stage="uninstall" keep="true" failure="warn"> <args> <arg value="stop" 
+				/> <arg value="iep-node.xml" /> </args> </executable> <executable targetfile="${INSTALL_PATH}/bin/${xin.app.name}.exe" stage="uninstall" keep="true" failure="warn"> <args> <arg value="uninstall" /> <arg value="iep-node.xml" /> </args> </executable> <singlefile src="${build.downloadsDir}/WinSW-x64.exe" target="${INSTALL_PATH}/bin/${xin.app.name}.exe" 
+				override="true" /> <executable targetfile="${INSTALL_PATH}/bin/${xin.app.name}.exe" stage="postinstall" keep="true"> <args> <arg value="install" /> <arg value="iep-node.xml" /> </args> </executable> <executable targetfile="${INSTALL_PATH}/bin/${xin.app.name}.exe" stage="postinstall" keep="true"> <args> <arg value="start" 
+				/> <arg value="iep-node.xml" /> </args> </executable> -->
 
 			<executable targetfile="${INSTALL_PATH}/bin/${xin.app.name}.bat" />
 			<executable targetfile="${INSTALL_PATH}/bin/dev.bat" />
