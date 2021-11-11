@@ -2,13 +2,13 @@
 set -o errexit
 set -o nounset
 
-export BUILD_DIR=$(cd "$(dirname "$0")/../.." && pwd -P);
+export BUILD_DIR=$(cd "$(dirname "$0")/../build" && pwd -P);
 echo "BUILD_DIR=${BUILD_DIR}"
 
 #rm -rf ${BUILD_DIR}/build/distributions/iep-node.app
 
 export MACVERSION="10.16.4"
-JAVA_HOME="$(cd $(dirname $(readlink -f $(which java)))/..; pwd)"
+export JAVA_HOME="$(cd $(dirname $(readlink -f $(which java)))/..; pwd)"
 echo JAVA_HOME=$JAVA_HOME
 
 javapackager -deploy -native dmg -v \
@@ -27,8 +27,6 @@ javapackager -deploy -native dmg -v \
 -BappVersion=${MACVERSION} \
 -Bicon=installer/AppIcon.icns
  
-
-
 #(cd ${BUILD_DIR}/izpack-utils/utils/wrappers/izpack2app && \
 #python3 izpack2app.py \
 #${BUILD_DIR}/distributions/iep-node-installer.jar \

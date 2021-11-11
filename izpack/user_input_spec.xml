@@ -4,11 +4,11 @@
 	<panel id="iep.config.panel">
 		<field type="title" txt="Infinity Economics Node Config" align="left"/>
 
-		<field type="radio" variable="target.chain" readonly="true">
+		<field type="radio" variable="iep.installer.targetEnv">
 			<description txt="Target chain/environment" />
 			<spec>
-				<choice txt="TESTNET" id="target.chain.tetsnet" value="mainnet" set="true" />
-				<choice txt="MAINNET" id="target.chain.mainnet" value="testnet" />
+				<choice txt="TESTNET" value="mainnet" set="true" />
+				<choice txt="MAINNET" value="testnet" />
 			</spec>
 		</field>
 
@@ -32,7 +32,7 @@
 		
 		<field type="staticText" align="left" txt="The admin password used to access restricted node funcitonalities"/>
 
-		<field type="password" align="left" variable="xin.adminPassword" >
+		<field type="password" align="left" variable="iep.installer.adminPassword" >
 			<spec allowEmptyValue="false" txt="The admin password used to access restricted node funcitonalities" set="Wuff1980_s7">
 				<pwd txt="The Password:" size="18" set="" />
 				<pwd txt="Retype Password:" size="18" set="" />
