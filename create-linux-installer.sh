@@ -3,4 +3,4 @@ set -o errexit
 set -o pipefail
 set -o nounset
 
-./gradlew createLinuxInstaller --no-daemon -Penv=linux
+./gradlew clean createLinuxInstaller --no-daemon -Penv=linux

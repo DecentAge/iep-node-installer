@@ -7,32 +7,20 @@
 		<field type="radio" variable="iep.installer.targetEnv">
 			<description txt="Target chain/environment" />
 			<spec>
-				<choice txt="TESTNET" value="testnet" set="true" />
-				<choice txt="MAINNET" value="mainnet" />
+				<choice txt="MAINNET" value="mainnet" set="true"/>
+				<choice txt="TESTNET" value="testnet"/>
 			</spec>
 		</field>
 
-
-		<field type="check" variable="setup.add.lightwallet" readonly="true">
-			<spec txt="Start as light wallet" id="setup.add.lightwallet" true="on" false="off" set="false" />
-		</field>
-
-		<!-- 
-		<field type="check" variable="setup.download.snapshot">
-			<spec txt="Download the latest snapshot of the blockchain to avoid having to sync the node" id="setup.add.lightwallet" true="on" false="off" set="false" />
-		</field>
-
-		<field type="divider" />
-		-->
 		<field type="space" />
 
 		<field type="check" variable="xin.installer.startAfterInstallation" >
 			<spec txt="Start XIN node after installation" true="true" false="false" set="true" />
 		</field>
-		
+		<field type="space" />
 		<field type="staticText" align="left" txt="The admin password used to access restricted node funcitonalities"/>
 
-		<field type="password" align="left" variable="iep.installer.adminPassword" >
+		<field type="password" align="left" variable="iep.installer.xin.adminPassword" >
 			<spec allowEmptyValue="false" txt="The admin password used to access restricted node funcitonalities" set="Wuff1980_s7">
 				<pwd txt="The Password:" size="18" set="" />
 				<pwd txt="Retype Password:" size="18" set="" />

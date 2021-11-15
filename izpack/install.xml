@@ -3,6 +3,8 @@
 
 	<properties>
 		<property file="@{iep.node.path}/src/main/resources/system.properties" prefix="iep" />
+		<property file="@{iep.node.path}/conf/mainnet.properties" prefix="iep.installer.mainnet" />
+		<property file="@{iep.node.path}/conf/testnet.properties" prefix="iep.installer.testnet" />
 		<property file="@{iep.targetOs}.properties" prefix="iep" />
 	</properties>
 	<logging>
