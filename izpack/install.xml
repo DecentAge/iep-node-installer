@@ -161,7 +161,6 @@
 		<res id="LicencePanel.licence" src="@{iep.node.path}/LICENSE.txt" />
 		<res id="Installer.image" src="images/installer_left_pane.png" />
 		<res id="shortcutSpec.xml" src="windows/shortcutSpec.xml" />
-		<res id="Unix_shortcutSpec.xml" src="linux/Unix_shortcutSpec.xml" />
 		<res id="RegistrySpec.xml" src="windows/RegistrySpec.xml" />
 		<res id="installer.langsel.img" src="images/logo.png" />
 		<res id="userInputSpec.xml" src="user_input_spec.xml" parse="yes" type="xml" />
@@ -192,7 +191,7 @@
 		<pack name="server.jre" required="yes">
 			<description>OpenLogic JRE</description>
 			<file src="${build.downloadsDir}/${iep.jreBundleFileName}" targetdir="${INSTALL_PATH}/jre" unpack="true" override="true">
-				<archivefileset dir="jdk-${iep.jreBundleVersion}-jre" />
+				<archivefileset dir="${iep.jreBundleFileDir}" />
 			</file>
 			<executable targetfile="${INSTALL_PATH}/jre/bin/java" failure="abort" keep="true" />
 
@@ -210,7 +209,7 @@
 			</file>
 			<singlefile src="@{iep.node.path}/conf/custom.properties" target="${USER_HOME}/.xin/conf/custom.properties" override="true" />
 			<singlefile src="@{iep.node.path}/conf/templates/installer.properties" target="${USER_HOME}/.xin/conf/installer.properties" override="true" />
-			<singlefile src="@{iep.node.path}/src/main/resources/log4j.properties" target="${USER_HOME}/.xin/conf/log4j.properties" override="true" />
+			<singlefile src="@{iep.node.path}/src/main/resources/log4j2.xml" target="${USER_HOME}/.xin/conf/log4j2.xml" override="true" />
 
 			<fileset dir="logs" targetdir="${USER_HOME}/.xin/logs" override="true" />
 			<executable targetfile="${USER_HOME}/.xin/logs" />

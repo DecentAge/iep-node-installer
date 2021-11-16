@@ -143,17 +143,32 @@ task downloadWindowsLibs(dependsOn: unpackSharedLibs, type: Download) {
     overwrite false
 } 
 
+
+task unzipMacLibs(dependsOn: downloadMacLibs, type: Copy) {
+  doFirst {
+    println "Unzipping mac libs...."
+    println "Deleting ${downloadFolder}/mac_unpack"
+    delete "${downloadFolder}/mac_unpack}"
+  }
+
+  
+  from tarTree("${downloadFolder}/${envConfig.jreBundleFileName}")
+  into "${downloadFolder}/mac_unpack"
+}
+
+
 task unzipWindowsLibs(dependsOn: downloadWindowsLibs, type: Copy) {
   doFirst {
     println "Unzipping windows libs...."
+    println "Deleting ${downloadFolder}/win_unpack"
+    delete "${downloadFolder}/win_unpack"
   }
 
-  delete "${downloadFolder}/${envConfig.jreBundleFileName}"
   from zipTree("${downloadFolder}/${envConfig.jreBundleFileName}")
-  into "${downloadFolder}"
+  into "${downloadFolder}/win_unpack"
 }
 
-task createMacInstaller(dependsOn: ["downloadMacLibs","izPackCreateInstaller"]) {
+task createMacInstaller(dependsOn: ["unzipMacLibs","izPackCreateInstaller"]) {
   doLast {
      exec {
      	  workingDir "${projectDir}/izpack"
@@ -182,4 +197,4 @@ task createWindowsInstaller(dependsOn: ["unzipWindowsLibs","izPackCreateInstalle
 
 //jar.dependsOn izPackCreateInstaller
 
-izPackCreateInstaller.mustRunAfter downloadMacLibs,downloadLinuxLibs,unzipWindowsLibs
+izPackCreateInstaller.mustRunAfter unzipMacLibs,downloadLinuxLibs,unzipWindowsLibs
