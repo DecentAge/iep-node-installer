@@ -18,5 +18,5 @@ python3 izpack2exe.py \
 	--with-7z=${BUILD_DIR}/izpack-utils/utils/wrappers/izpack2exe/7zz \
 	--no-upx \
 	--name xin \
-	--with-jdk ${BUILD_DIR}/downloads/jdk-11.0.12+7-jre)
+	--with-jdk ${BUILD_DIR}/../downloads/jdk-11.0.12+7-jre)
 #	--with-upx=${BUILD_DIR}/izpack-utils/utils/wrappers/izpack2exe/UPX)

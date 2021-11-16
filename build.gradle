@@ -30,7 +30,7 @@ def loadProperties() {
 loadProperties()
 
 ext {
-    downloadFolder = file("${buildDir}/downloads")
+    downloadFolder = file("${projectDir}/downloads")
     jreBundleUnderlineVersion=envConfig.jreBundleVersion.replaceAll('\\+','_')
 }
 
@@ -104,12 +104,12 @@ task downloadLinuxLibs(dependsOn: unpackSharedLibs, type: Download) {
 }
 
 /*task unpackLinuxLibs(dependsOn: downloadLinuxLibs, type: Copy) {
-	fileTree(dir: "${buildDir}/downloads").include('*.tar.gz').each { tarFile ->
+	fileTree(dir: "${downloadFolder}").include('*.tar.gz').each { tarFile ->
 	   copy {
 	      println "Untar $tarFile.name"
 	      def name = tarFile.name - '.tar.gz'
-	      from tarTree("${buildDir}/downloads/${tarFile.name}")
-	      into "${buildDir}/downloads"       
+	      from tarTree("${downloadFolder}/${tarFile.name}")
+	      into "${downloadFolder}"       
 	   }
 	}
 }*/
@@ -148,9 +148,9 @@ task unzipWindowsLibs(dependsOn: downloadWindowsLibs, type: Copy) {
     println "Unzipping windows libs...."
   }
 
-  delete "${buildDir}/downloads/${envConfig.jreBundleFileName}"
-  from zipTree("${buildDir}/downloads/${envConfig.jreBundleFileName}")
-  into "${buildDir}/downloads"
+  delete "${downloadFolder}/${envConfig.jreBundleFileName}"
+  from zipTree("${downloadFolder}/${envConfig.jreBundleFileName}")
+  into "${downloadFolder}"
 }
 
 task createMacInstaller(dependsOn: ["downloadMacLibs","izPackCreateInstaller"]) {

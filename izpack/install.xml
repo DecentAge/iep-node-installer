@@ -26,7 +26,7 @@
 		<variable name="xin.installer.name" value="iep-node-installer" />
 
 		<variable name="build.dir" value="../build" />
-		<variable name="build.downloadsDir" value="../build/downloads" />
+		<variable name="build.downloadsDir" value="../downloads" />
 
 		<variable name="DesktopShortcutCheckboxEnabled" value="true" />
 		<variable name="TargetPanel.dir.mac" value="/Applications/xin.app" />
