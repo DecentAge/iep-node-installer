@@ -162,7 +162,7 @@
 		<res id="Installer.image" src="images/installer_left_pane.png" />
 		<res id="shortcutSpec.xml" src="windows/shortcutSpec.xml" />
 		<res id="RegistrySpec.xml" src="windows/RegistrySpec.xml" />
-		<res id="installer.langsel.img" src="images/logo.png" />
+		<res id="installer.langsel.img" src="images/logo_large.png" />
 		<res id="userInputSpec.xml" src="user_input_spec.xml" parse="yes" type="xml" />
 		<res id="ProcessPanel.Spec.xml" src="process_panel_spec.xml" />
 	</resources>
