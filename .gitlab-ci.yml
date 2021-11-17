@@ -17,7 +17,7 @@ download-artifacts:
       - build/
 
 build-windows:
-  image: docker:latest
+  image: adoptopenjdk/openjdk11:alpine-slim
   stage: build
   before_script:
     - |
@@ -32,7 +32,7 @@ build-windows:
     - ci-cd
 
 build-linux:
-  image: docker:latest
+  image: adoptopenjdk/openjdk11:alpine-slim
   stage: build
   before_script:
     - |
@@ -47,7 +47,7 @@ build-linux:
     - ci-cd
 
 build-mac:
-  image: docker:latest
+  image: adoptopenjdk/openjdk11:alpine-slim
   stage: build
   before_script:
     - |
