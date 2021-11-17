@@ -1,0 +1,62 @@
+stages:
+  - prepare
+  - build
+
+
+download-artifacts:
+  stage: prepare
+  script:
+    - ls -alt build
+  needs:
+    - project: infinity-economics/iep-wallet-ui
+      ref: ${CI_COMMIT_REF_NAME}
+      job: docker-build
+      artifacts: true
+  artifacts:
+    paths:
+      - build/
+
+build-windows:
+  image: docker:latest
+  stage: build
+  before_script:
+    - |
+      apk add --update --no-cache git curl bash
+  script:
+    - |
+      ./create-win-installer.sh
+  artifacts:
+    paths:
+      - ./build/distributions/iep-installer-node.exe
+  tags:
+    - ci-cd
+
+build-linux:
+  image: docker:latest
+  stage: build
+  before_script:
+    - |
+      apk add --update --no-cache git curl bash
+  script:
+    - |
+      ./create-linux-installer.sh
+  artifacts:
+    paths:
+      - ./build/distributions/iep-node-installer.run
+  tags:
+    - ci-cd
+
+build-mac:
+  image: docker:latest
+  stage: build
+  before_script:
+    - |
+      apk add --update --no-cache git curl bash
+  script:
+    - |
+      ./create-mac-installer.sh
+  artifacts:
+    paths:
+      - ./build/distributions/iep-node-installer.app
+  tags:
+    - ci-cd
