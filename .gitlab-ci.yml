@@ -21,7 +21,7 @@ build-windows:
   stage: build
   before_script:
     - |
-      apk add --update --no-cache git curl bash
+      apk add --update --no-cache bash python3 py3-pip
   script:
     - |
       ./create-win-installer.sh
@@ -36,7 +36,7 @@ build-linux:
   stage: build
   before_script:
     - |
-      apk add --update --no-cache git curl bash
+      apk add --update --no-cache bash
   script:
     - |
       ./create-linux-installer.sh
@@ -51,7 +51,7 @@ build-mac:
   stage: build
   before_script:
     - |
-      apk add --update --no-cache git curl bash
+      apk add --update --no-cache bash
   script:
     - |
       ./create-mac-installer.sh
