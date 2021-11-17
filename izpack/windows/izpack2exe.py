@@ -73,6 +73,15 @@ def create_exe(settings):
     else:
         jdk = 'javaw' #java is added somehow to the PATH
     
+    settings.launch='cmd.exe'
+    settings.launchargs='/c iep-node-installer.cmd'
+
+    exec_command = open("iep-node-installer.cmd", 'w')
+    exec_command.write('@echo off\n')
+    exec_command.write(jdk + " -jar " + filename + '\n')
+    exec_command.close()
+    settings.file.append("iep-node-installer.cmd")
+
     if settings.p7z == '7za':
         p7z = os.path.join(os.path.dirname(sys.argv[0]), '7za')
     else:
@@ -84,6 +93,8 @@ def create_exe(settings):
         os.remove('installer.7z')
     files = '" "'.join(settings.file)
     p7zcmd = '"%s" a -mmt -t7z -mx=9 installer.7z "%s"' % (p7z, files)
+
+    print("p7zcmd="+p7zcmd+'\n')
     subprocess.call(p7zcmd, shell=use_shell)
     
     config = open('config.txt', 'w')
@@ -92,6 +103,7 @@ def create_exe(settings):
     if settings.prompt:
         config.write('BeginPrompt="Install %s?"\n' % settings.name)
     config.write('Progress="yes"\n')
+    
     
     if settings.launch == '':
         config.write('ExecuteFile="' + jdk +'"\n') # who is going to run my installer.jar?
@@ -126,8 +138,8 @@ def create_exe(settings):
         upx = '"%s" --ultra-brute "%s"' % (upx, settings.output)
         subprocess.call(upx, shell=use_shell)
     
-    os.remove('config.txt')
-    os.remove('installer.7z')
+#    os.remove('config.txt')
+#    os.remove('installer.7z')
 
 def main():
     create_exe(parse_options())

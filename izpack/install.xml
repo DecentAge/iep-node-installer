@@ -174,9 +174,11 @@
 		<panel classname="UserInputPanel" id="iep.config.panel" >
 			<actions>
 				<action stage="postvalidate" classname="xin.installer.UpdateNodePropertiesAction"/>
+				<action stage="postvalidate" classname="xin.installer.ShutdownNodeAction"/>
 			</actions>
 		</panel>
-		<panel classname="InstallPanel" />
+		<panel classname="InstallPanel"/>
+		
 		<panel classname="ShortcutPanel" />
 		<panel classname="ProcessPanel" />
 		<panel classname="SimpleFinishPanel" allowClose="true" />
@@ -188,7 +190,7 @@
 			</pack> <pack name="server.jre.unix" required="yes" os="unix"> <description>OpenLogic JRE</description> <os family="unix" /> <file src="${build.downloadsDir}/OpenJDK11U-jre_x64_linux_hotspot_11.0.12_7.tar.gz" targetdir="${INSTALL_PATH}/jre" unpack="true" override="true"> <archivefileset dir="jdk-11.0.12+7-jre" /> </file> 
 			<executable targetfile="${INSTALL_PATH}/jre/bin/java" failure="abort" keep="true" /> <file src="${build.downloadsDir}/openjfx-${build.bundleJFXVersion}_linux-x64_bin-sdk.zip" targetdir="${INSTALL_PATH}/javafx-sdk" unpack="true" override="true"> <archivefileset dir="javafx-sdk-${build.bundleJFXVersion}" /> </file> </pack> -->
 
-		<pack name="server.jre" required="yes">
+		<pack name="server.jre" required="yes" uninstall="false" >
 			<description>OpenLogic JRE</description>
 			<file src="${build.downloadsDir}/${iep.jreBundleFileName}" targetdir="${INSTALL_PATH}/jre" unpack="true" override="true">
 				<archivefileset dir="${iep.jreBundleFileDir}" />
@@ -198,6 +200,7 @@
 			<file src="${build.downloadsDir}/${iep.jfxBundleFileName}" targetdir="${INSTALL_PATH}/javafx-sdk" unpack="true" override="true">
 				<archivefileset dir="javafx-sdk-${iep.jfxBundleVersion}" />
 			</file>
+			<updatecheck/>
 		</pack>
 
 		<pack name="server" required="yes">
@@ -214,7 +217,7 @@
 			<fileset dir="logs" targetdir="${USER_HOME}/.xin/logs" override="true" />
 			<executable targetfile="${USER_HOME}/.xin/logs" />
 			<parsable targetfile="${USER_HOME}/.xin/conf/installer.properties" type="plain" />
-
+			<updatecheck/>
 		</pack>
 
 		<pack name="server.mac" os="mac" required="yes">
@@ -228,6 +231,7 @@
 			<file src="linux/stop.sh" targetdir="${INSTALL_PATH}/bin" override="true" />
 			<parsable targetfile="${INSTALL_PATH}/bin/stop.sh" type="shell" />
 			<executable targetfile="${INSTALL_PATH}/bin/stop.sh" stage="uninstall" />
+			<updatecheck/>
 		</pack>
 
 
@@ -236,12 +240,17 @@
 			<os family="unix" />
 			<executable targetfile="${INSTALL_PATH}/bin/${xin.app.name}" />
 			<executable targetfile="${INSTALL_PATH}/bin/dev" />
+
+			<file src="linux/stop.sh" targetdir="${INSTALL_PATH}/bin" override="true" />
+			<parsable targetfile="${INSTALL_PATH}/bin/stop.sh" type="shell" />
+			<!-- <executable targetfile="${INSTALL_PATH}/bin/stop.sh" stage="postinstall" /> -->		
+			<executable targetfile="${INSTALL_PATH}/bin/stop.sh" stage="uninstall" />
+						
 			<file src="linux/start.sh" targetdir="${INSTALL_PATH}/bin" override="true" />
 			<parsable targetfile="${INSTALL_PATH}/bin/start.sh" type="shell" />
 			<executable targetfile="${INSTALL_PATH}/bin/start.sh" stage="never" failure="warn" keep="true" />
-			<file src="linux/stop.sh" targetdir="${INSTALL_PATH}/bin" override="true" />
-			<parsable targetfile="${INSTALL_PATH}/bin/stop.sh" type="shell" />
-			<executable targetfile="${INSTALL_PATH}/bin/stop.sh" stage="uninstall" />
+
+			<updatecheck/>
 		</pack>
 
 
@@ -262,6 +271,7 @@
 
 			<file src="windows/stop.bat" targetdir="${INSTALL_PATH}/bin" override="true" />
 			<executable targetfile="${INSTALL_PATH}/bin/stop.bat" stage="uninstall" keep="true" failure="ignore" />
+			<updatecheck/>
 		</pack>
 	</packs>
 </izpack:installation>
