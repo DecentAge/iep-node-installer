@@ -6,7 +6,7 @@ stages:
 download-artifacts:
   stage: prepare
   script:
-    - ls -alt
+    - ls -alt build
   needs:
     - project: infinity-economics/iep-node
       ref: ${CI_COMMIT_REF_NAME}
