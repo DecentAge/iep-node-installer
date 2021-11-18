@@ -6,15 +6,12 @@ stages:
 download-artifacts:
   stage: prepare
   script:
-    - ls -alt build
+    - ls -alt
   needs:
     - project: infinity-economics/iep-node
       ref: ${CI_COMMIT_REF_NAME}
       job: docker-build
       artifacts: true
-  artifacts:
-    paths:
-      - build/
 
 build-windows:
   image: adoptopenjdk/openjdk11:alpine-slim
