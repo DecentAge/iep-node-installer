@@ -7,6 +7,7 @@ download-artifacts:
   stage: prepare
   script:
     - ls -alt build
+    - echo "CI_COMMIT_REF_NAME=${CI_COMMIT_REF_NAME}"
   needs:
     - project: infinity-economics/iep-node
       ref: ${CI_COMMIT_REF_NAME}
