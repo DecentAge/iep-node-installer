@@ -11,7 +11,7 @@ download-artifacts:
   needs:
     - project: infinity-economics/iep-node
       ref: ${CI_COMMIT_REF_NAME}
-      job: docker-build
+      job: prepare-iep-node-artifacts
       artifacts: true
 
 build-windows:
