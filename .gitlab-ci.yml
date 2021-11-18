@@ -8,7 +8,7 @@ download-artifacts:
   script:
     - ls -alt build
   needs:
-    - project: infinity-economics/iep-wallet-ui
+    - project: infinity-economics/iep-node
       ref: ${CI_COMMIT_REF_NAME}
       job: docker-build
       artifacts: true
