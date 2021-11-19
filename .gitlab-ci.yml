@@ -22,6 +22,7 @@ build-windows:
       apk add --update --no-cache bash python3 py3-pip
   script:
     - |
+      ls -alt ${PWD}/iep-node-artifacts
       ./create-win-installer.sh ${PWD}/iep-node-artifacts
   artifacts:
     paths:
