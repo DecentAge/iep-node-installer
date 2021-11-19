@@ -22,7 +22,7 @@ build-windows:
       apk add --update --no-cache bash python3 py3-pip
   script:
     - |
-      ./create-win-installer.sh
+      ./create-win-installer.sh ${PWD}/iep-node-artifacts
   artifacts:
     paths:
       - ./build/distributions/iep-installer-node.exe
@@ -37,7 +37,7 @@ build-linux:
       apk add --update --no-cache bash
   script:
     - |
-      ./create-linux-installer.sh
+      ./create-linux-installer.sh ${PWD}/iep-node-artifacts
   artifacts:
     paths:
       - ./build/distributions/iep-node-installer.run
@@ -52,7 +52,7 @@ build-mac:
       apk add --update --no-cache bash
   script:
     - |
-      ./create-mac-installer.sh
+      ./create-mac-installer.sh ${PWD}/iep-node-artifacts
   artifacts:
     paths:
       - ./build/distributions/iep-node-installer.app

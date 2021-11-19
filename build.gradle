@@ -18,10 +18,17 @@ plugins {
 apply plugin: 'com.bmuschko.izpack'
 
 def loadProperties() {
-    def environment = hasProperty('env') ? env : 'linux'
+
+    if (project.hasProperty("nodeProjectPath")) {
+            println "Our input argument with project property ["+project.getProperty("nodeProjectPath")+"]"
+    }
+
+    def nodeProjectPath = project.hasProperty("nodeProjectPath") ? project.getProperty("nodeProjectPath") : "../iep-node"
+    def environment = project.hasProperty('env') ? env : 'linux'
     println "Current Environment: " + environment
     project.ext.envConfig  = new Properties()
     project.ext.envConfig.name=environment
+    project.ext.envConfig.nodeProjectPath=nodeProjectPath
     file(environment+".properties").withInputStream {
         project.ext.envConfig.load(it) 
     }
@@ -67,7 +74,7 @@ izpack {
     compression = 'default'
     compressionLevel = 9
     appProperties = [
-    "iep.node.path": file("../iep-node"), 
+    "iep.node.path": file(envConfig.nodeProjectPath), 
     "iep.targetOs" : envConfig.name
     ]
 }
@@ -150,7 +157,6 @@ task unzipMacLibs(dependsOn: downloadMacLibs, type: Copy) {
     println "Deleting ${downloadFolder}/mac_unpack"
     delete "${downloadFolder}/mac_unpack}"
   }
-
   
   from tarTree("${downloadFolder}/${envConfig.jreBundleFileName}")
   into "${downloadFolder}/mac_unpack"
