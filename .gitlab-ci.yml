@@ -14,7 +14,7 @@ download-artifacts:
       artifacts: true
   artifacts:
     paths:
-      - prepare-iep-node-artifacts
+      - iep-node-artifacts
 
 build-windows:
   image: adoptopenjdk/openjdk11:alpine-slim
