@@ -6,13 +6,15 @@ stages:
 download-artifacts:
   stage: prepare
   script:
-    - ls -alt iep-node-artifacts
     - echo "CI_COMMIT_REF_NAME=${CI_COMMIT_REF_NAME}"
   needs:
     - project: infinity-economics/iep-node
       ref: ${CI_COMMIT_REF_NAME}
       job: prepare-iep-node-artifacts
       artifacts: true
+  artifacts:
+    paths:
+      - prepare-iep-node-artifacts
 
 build-windows:
   image: adoptopenjdk/openjdk11:alpine-slim
