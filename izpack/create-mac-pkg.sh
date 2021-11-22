@@ -6,7 +6,7 @@ export BASE_DIR=$(cd "$(dirname "$0")/.." && pwd -P);
 export BUILD_DIR=$(cd "$(dirname "$0")/../build" && pwd -P);
 echo "BUILD_DIR=${BUILD_DIR}"
 
-CONTENTS_TEMPLATE_DIR=${BASE_DIR}/izpack/mac/Contents
+CONTENTS_TEMPLATE_DIR=${BASE_DIR}/izpack/mac/iep-node-installer/Contents
 
 #rm -rf ${BUILD_DIR}/build/distributions/iep-node.app
 

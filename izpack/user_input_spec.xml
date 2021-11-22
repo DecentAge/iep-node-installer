@@ -15,7 +15,7 @@
 		<field type="space" />
 
 		<field type="check" variable="xin.installer.startAfterInstallation" >
-			<spec txt="Start XIN node after installation" true="true" false="false" set="true" />
+			<spec txt="Start IEP Node after installation" true="true" false="false" set="true" />
 		</field>
 		<field type="space" />
 		<field type="staticText" align="left" txt="The admin password used to access restricted node funcitonalities"/>

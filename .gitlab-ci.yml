@@ -7,6 +7,7 @@ download-artifacts:
   stage: prepare
   script:
     - echo "CI_COMMIT_REF_NAME=${CI_COMMIT_REF_NAME}"
+    - ls -alt iep-node-artifacts
   needs:
     - project: infinity-economics/iep-node
       ref: ${CI_COMMIT_REF_NAME}
@@ -61,3 +62,41 @@ build-mac:
       - ./build/distributions/iep-node-installer.app
   tags:
     - ci-cd
+
+create-github-release:
+  stage: release
+  image: alpine:3.13
+  before_script:
+    - |
+      GH_VERSION=1.14.0
+      apk add --no-cache git wget rsync curl && \
+      wget https://github.com/cli/cli/releases/download/v${GH_VERSION}/gh_${GH_VERSION}_linux_amd64.tar.gz && \
+      tar -zxvf gh_${GH_VERSION}_linux_amd64.tar.gz && \
+      chmod +x gh_${GH_VERSION}_linux_amd64/bin/gh && \
+      rsync -az --remove-source-files gh_${GH_VERSION}_linux_amd64/bin/ /usr/bin
+  script:
+    - |
+      RELEASE_VERSION=$(cat release-version.txt)
+      gh --version
+
+      export GH_REPO=github.com/DecentAge/${CI_PROJECT_NAME}
+      export GITHUB_TOKEN="${GITHUB_TOKEN}"
+
+      gh config set prompt disabled	
+      echo "Deleting release ${RELEASE_VERSION}"
+      gh release delete ${RELEASE_VERSION} || echo "Could not delete release ${RELEASE_VERSION}"
+
+      #echo "Deleting tag ${RELEASE_VERSION}"
+      #curl --request DELETE --header "PRIVATE-TOKEN: $WRITE_API_PAT" "${CI_API_V4_URL}/progithub publishjects/${CI_PROJECT_ID}/tags/${RELEASE_VERSION}" || "Could not delete tag ${RELEASE_VERSION}"
+
+      #echo "Waiting 8 seconds to sync GitLab -> Github"
+      #sleep 8	  
+   
+      echo "Creating release ${RELEASE_VERSION}"
+      gh release create $RELEASE_VERSION --target master --title "$RELEASE_VERSION ($RELEASE_NAME)" --notes-file ${RELEASE_DESCRIPTION_PATH}
+
+      echo "Uploading build/$RELEASE_DOCKER_IMAGE_FILE_NAME"
+      gh release upload $RELEASE_VERSION build/$RELEASE_DOCKER_IMAGE_FILE_NAME --clobber || "Echo couldn't upload $RELEASE_VERSION build/$RELEASE_DOCKER_IMAGE_FILE_NAME"
+
+      echo "Uploading build/$RELEASE_PACKAGE_FILE_NAME"
+      gh release upload $RELEASE_VERSION build/$RELEASE_PACKAGE_FILE_NAME --clobber || "Echo couldn't upload $RELEASE_VERSION Uploading build/$RELEASE_PACKAGE_FILE_NAME"

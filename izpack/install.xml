@@ -11,7 +11,7 @@
 		<log-file pattern="${USER_HOME}/.xin/logs/installation.log" append="true" mkdirs="true" level="INFO" />
 	</logging>
 	<info>
-		<appname>XIN</appname>
+		<appname>IEP</appname>
 		<appversion>@{iep.xin.version}</appversion>
 		<url>https://infinity-economics.io</url>
 		<run-privileged condition="izpack.windowsinstall" uninstaller="true" />
@@ -225,6 +225,11 @@
 			<os family="mac" />
 			<executable targetfile="${INSTALL_PATH}/bin/${xin.app.name}" />
 			<executable targetfile="${INSTALL_PATH}/bin/dev" />
+			
+            <fileset dir="mac/iep-node-installer/Contents" targetdir="${INSTALL_PATH}/Contents" override="true"/>		
+			<parsable targetfile="${INSTALL_PATH}/Contents/MacOS/iep"/>
+			<executable targetfile="${INSTALL_PATH}/Contents/MacOS/iep"/>			
+			
 			<file src="linux/start.sh" targetdir="${INSTALL_PATH}/bin" override="true" />
 			<parsable targetfile="${INSTALL_PATH}/bin/start.sh" type="shell" />
 			<executable targetfile="${INSTALL_PATH}/bin/start.sh" stage="never" failure="warn" keep="true" />
