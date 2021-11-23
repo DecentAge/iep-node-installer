@@ -47,6 +47,7 @@ build-linux:
   script:
     - |
       ./create-linux-installer.sh ${PWD}/iep-node-artifacts
+      ls -alt ./build/distributions/
   artifacts:
     paths:
       - ./build/distributions/iep-node-installer.run
