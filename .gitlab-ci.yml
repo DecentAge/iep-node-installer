@@ -34,6 +34,10 @@ build-windows:
   artifacts:
     paths:
       - ./build/distributions/iep-installer-node.exe
+  cache:
+    key: windows_downloads
+    paths:
+      - downloads/
   tags:
     - ci-cd
 
@@ -49,6 +53,10 @@ build-linux:
   artifacts:
     paths:
       - ./build/distributions/iep-node-installer.run
+  cache:
+    key: linux_downloads
+    paths:
+      - downloads/
   tags:
     - ci-cd
 
@@ -64,6 +72,10 @@ build-mac:
   artifacts:
     paths:
       - ./build/distributions/iep-node-installer.app
+  cache:
+    key: mac_downloads
+    paths:
+      - downloads/
   tags:
     - ci-cd
 
@@ -96,8 +108,8 @@ create-github-release:
       #echo "Waiting 8 seconds to sync GitLab -> Github"
       #sleep 8	  
    
-      #echo "Creating release ${RELEASE_VERSION}"
-      #gh release create $RELEASE_VERSION --target master --title "$RELEASE_VERSION ($RELEASE_NAME)" --notes-file ${RELEASE_DESCRIPTION_PATH}
+      echo "Creating release ${RELEASE_VERSION}"
+      gh release create $RELEASE_VERSION --target master --title "$RELEASE_VERSION ($RELEASE_NAME)" --notes-file ${RELEASE_DESCRIPTION_PATH}
 
       #upload_file {
       #  local file_path=$1
