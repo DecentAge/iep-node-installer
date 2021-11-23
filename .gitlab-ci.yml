@@ -107,7 +107,7 @@ create-github-release:
    
       echo "Creating release ${RELEASE_VERSION}"
       RELEASE_DESCRIPTION_PATH=${PWD}/iep-node-artifacts/CHANGELOG-${RELEASE_VERSION}.md
-      gh release create $RELEASE_VERSION --target $CI_COMMIT_REF_NAME  --target master --title "$RELEASE_VERSION ($RELEASE_NAME)" --notes-file ${RELEASE_DESCRIPTION_PATH}
+      gh release create $RELEASE_VERSION --target $CI_COMMIT_REF_NAME --title "$RELEASE_VERSION ($RELEASE_NAME)" --notes-file ${RELEASE_DESCRIPTION_PATH}
 
       upload_release_file() {
         local file_path=$1
@@ -118,7 +118,7 @@ create-github-release:
 
       upload_release_file ./build/distributions/iep-node-installer.exe "Windows(x64)"
       upload_release_file ./build/distributions/iep-node-installer.run "Linux(x64)"
-      upload_release_file ./build/distributions/iep-node-installer.zip "MacOS(x64)
+      upload_release_file ./build/distributions/iep-node-installer.zip "MacOS(x64)""
   when: manual
   tags:
     - ci-cd
