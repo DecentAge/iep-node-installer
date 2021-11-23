@@ -47,7 +47,6 @@ build-linux:
   script:
     - |
       ./create-linux-installer.sh ${PWD}/iep-node-artifacts
-      ls -alt ./build/distributions/
   artifacts:
     paths:
       - ./build/distributions/iep-node-installer.run
@@ -62,7 +61,7 @@ build-mac:
   image: adoptopenjdk/openjdk11:alpine-slim
   stage: build
   before_script:
-    - |--target <branch>
+    - |
       apk add --update --quiet --no-cache bash
   script:
     - |
