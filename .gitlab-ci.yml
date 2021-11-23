@@ -30,7 +30,7 @@ build-windows:
       ./create-win-installer.sh ${PWD}/iep-node-artifacts
   artifacts:
     paths:
-      - ./build/distributions/iep-installer-node.exe
+      - ./build/distributions/iep-node-installer.exe
   cache:
     key: windows_downloads
     paths:
