@@ -195,7 +195,7 @@
 			<file src="${build.downloadsDir}/${iep.jreBundleFileName}" targetdir="${INSTALL_PATH}/jre" unpack="true" override="true">
 				<archivefileset dir="${iep.jreBundleFileDir}" />
 			</file>
-			<executable targetfile="${INSTALL_PATH}/jre/bin/java" failure="abort" keep="true" />
+			<executable targetfile="${INSTALL_PATH}/jre/Home/bin/java" failure="abort" keep="true" />
 
 			<file src="${build.downloadsDir}/${iep.jfxBundleFileName}" targetdir="${INSTALL_PATH}/javafx-sdk" unpack="true" override="true">
 				<archivefileset dir="javafx-sdk-${iep.jfxBundleVersion}" />
@@ -226,14 +226,14 @@
 			<executable targetfile="${INSTALL_PATH}/bin/${xin.app.name}" />
 			<executable targetfile="${INSTALL_PATH}/bin/dev" />
 			
-            <fileset dir="mac/iep-node-installer/Contents" targetdir="${INSTALL_PATH}/Contents" override="true"/>		
+            <fileset dir="mac/iep-node/Contents" targetdir="${INSTALL_PATH}/Contents" override="true"/>		
 			<parsable targetfile="${INSTALL_PATH}/Contents/MacOS/iep"/>
 			<executable targetfile="${INSTALL_PATH}/Contents/MacOS/iep"/>			
 			
-			<file src="linux/start.sh" targetdir="${INSTALL_PATH}/bin" override="true" />
+			<file src="mac/start.sh" targetdir="${INSTALL_PATH}/bin" override="true" />
 			<parsable targetfile="${INSTALL_PATH}/bin/start.sh" type="shell" />
 			<executable targetfile="${INSTALL_PATH}/bin/start.sh" stage="never" failure="warn" keep="true" />
-			<file src="linux/stop.sh" targetdir="${INSTALL_PATH}/bin" override="true" />
+			<file src="mac/stop.sh" targetdir="${INSTALL_PATH}/bin" override="true" />
 			<parsable targetfile="${INSTALL_PATH}/bin/stop.sh" type="shell" />
 			<executable targetfile="${INSTALL_PATH}/bin/stop.sh" stage="uninstall" />
 			<updatecheck/>
