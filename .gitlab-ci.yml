@@ -109,14 +109,14 @@ create-github-release:
       RELEASE_DESCRIPTION_PATH=${PWD}/iep-node-artifacts/CHANGELOG-${RELEASE_VERSION}.md
       gh release create $RELEASE_VERSION --target master --title "$RELEASE_VERSION ($RELEASE_NAME)" --notes-file ${RELEASE_DESCRIPTION_PATH}
 
-      upload_file() {
+      upload_release_file() {
         local file_path=$1
         echo "Uploading ${file_path}"
         gh release upload $RELEASE_VERSION ${file_path} --clobber || "Echo couldn't upload $RELEASE_VERSION ${file_path}"
       }
 
-      upload_file ./build/distributions/iep-node-installer.exe
-      upload_file ./build/distributions/iep-node-installer.run
+      upload_release_file ./build/distributions/iep-node-installer.exe
+      upload_release_file ./build/distributions/iep-node-installer.run
       #upload_file ./build/distributions/iep-node-installer.app
   when: manual
   tags:
