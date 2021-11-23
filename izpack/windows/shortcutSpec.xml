@@ -38,8 +38,7 @@
 		
 	<shortcut
 		name="Uninstall IEP Node"
-		target="$JAVA_HOME\bin\java.exe"
-		commandLine="-jar &quot;$INSTALL_PATH\Uninstaller\uninstaller.jar&quot;"
+        target="${USER_HOME}/IEPUninstaller/uninstall.bat"
 		workingDirectory="$INSTALL_PATH"
         description="Uninstalls the node for Infinity Economics"
 		iconFile="$INSTALL_PATH\html\www\wallet\assets\images\favicon.ico"

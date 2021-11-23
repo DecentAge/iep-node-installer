@@ -1,10 +1,12 @@
 @ECHO OFF
 
-FOR %%A IN ("%~dp0.") DO SET INSTALL_DIR=%%~dpA
-SET INSTALL_DIR=%INSTALL_DIR:~0,-1%
+SET INSTALL_DIR=${INSTALL_PATH}
 SET INSTALL_JAVA_HOME=%INSTALL_DIR%\jre
-SET UNINSTALL_JAVA_HOME=%USERPROFILE%\iep_uninstaller\jre
+SET UNINSTALL_JAVA_HOME=%USERPROFILE%\IEPUninstaller\jre
 
-xcopy "%INSTALL_JAVA_HOME%" "%UNINSTALL_JAVA_HOME%" /q /h /y
+xcopy "%INSTALL_JAVA_HOME%" "%UNINSTALL_JAVA_HOME%" /q /s /e /k /y /i
 
-"$UNINSTALL_JAVA_HOME\bin\javaw.exe" -jar "$INSTALL_PATH\uninstaller\uninstaller.jar"
+"%UNINSTALL_JAVA_HOME%\bin\javaw.exe" -jar "%USERPROFILE%\IEPUninstaller\uninstaller.jar"
+
+rmdir /S /Q "%INSTALL_DIR%"
+rmdir /S /Q "%USERPROFILE%\IEPUninstaller"

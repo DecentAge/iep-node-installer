@@ -15,7 +15,8 @@
 		<appversion>@{iep.xin.version}</appversion>
 		<url>https://infinity-economics.io</url>
 		<run-privileged condition="izpack.windowsinstall" uninstaller="true" />
-		<uninstaller write="yes" />
+		<uninstaller write="yes" path="${USER_HOME}/IEPUninstaller"/>
+		<!-- <summarylogfilepath>${USER_HOME}/IEPUninstaller</summarylogfilepath> -->
 		<javaversion>11</javaversion>
 		<!-- <requiresjdk>yes</requiresjdk> -->
 	</info>
@@ -185,10 +186,6 @@
 	</panels>
 
 	<packs>
-		<!-- <pack name="server.jre.windows" required="yes" os="windows"> <description>OpenLogic JRE</description> <os family="windows" /> <file src="${build.downloadsDir}/OpenJDK11U-jre_x64_windows_hotspot_11.0.12_7.zip" targetdir="${INSTALL_PATH}/jre" unpack="true" override="true"> <archivefileset dir="jdk-11.0.12+7-jre" /> 
-			</file> <executable targetfile="${INSTALL_PATH}/jre/bin/java" failure="abort" keep="true" /> <file src="${build.downloadsDir}/openjfx-${build.bundleJFXVersion}_windows-x64_bin-sdk.zip" targetdir="${INSTALL_PATH}/javafx-sdk" unpack="true" override="true"> <archivefileset dir="javafx-sdk-${build.bundleJFXVersion}" /> </file> 
-			</pack> <pack name="server.jre.unix" required="yes" os="unix"> <description>OpenLogic JRE</description> <os family="unix" /> <file src="${build.downloadsDir}/OpenJDK11U-jre_x64_linux_hotspot_11.0.12_7.tar.gz" targetdir="${INSTALL_PATH}/jre" unpack="true" override="true"> <archivefileset dir="jdk-11.0.12+7-jre" /> </file> 
-			<executable targetfile="${INSTALL_PATH}/jre/bin/java" failure="abort" keep="true" /> <file src="${build.downloadsDir}/openjfx-${build.bundleJFXVersion}_linux-x64_bin-sdk.zip" targetdir="${INSTALL_PATH}/javafx-sdk" unpack="true" override="true"> <archivefileset dir="javafx-sdk-${build.bundleJFXVersion}" /> </file> </pack> -->
 
 		<pack name="server.jre" required="yes" uninstall="false" >
 			<description>OpenLogic JRE</description>
@@ -276,6 +273,11 @@
 
 			<file src="windows/stop.bat" targetdir="${INSTALL_PATH}/bin" override="true" />
 			<executable targetfile="${INSTALL_PATH}/bin/stop.bat" stage="uninstall" keep="true" failure="ignore" />
+			
+			<file src="windows/uninstall.bat" targetdir="${USER_HOME}/IEPUninstaller" override="true" />
+			<executable targetfile="${USER_HOME}/IEPUninstaller/uninstall.bat" stage="never" keep="true" failure="warn" />
+			<parsable targetfile="${USER_HOME}/IEPUninstaller/uninstall.bat" type="plain" />	
+			
 			<updatecheck/>
 		</pack>
 	</packs>

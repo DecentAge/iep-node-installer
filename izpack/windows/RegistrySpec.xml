@@ -11,7 +11,7 @@
         <value name="UninstallString"
                keypath="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$APP_NAME"
                root="HKLM"
-               string="&quot;$INSTALL_PATH\jre\bin\javaw.exe&quot; -jar &quot;$INSTALL_PATH\uninstaller\uninstaller.jar&quot;"/>
+               string="&quot;${USER_HOME}/IEPUninstaller/uninstall.bat&quot;"/>
         <value name="DisplayIcon"
                keypath="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$APP_NAME"
                root="HKLM"
