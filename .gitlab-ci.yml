@@ -118,7 +118,7 @@ create-github-release:
 
       upload_release_file ./build/distributions/iep-node-installer.exe "Windows(x64)"
       upload_release_file ./build/distributions/iep-node-installer.run "Linux(x64)"
-      upload_release_file ./build/distributions/iep-node-installer.zip "MacOS(x64)""
+      upload_release_file ./build/distributions/iep-node-installer.zip "MacOS(x64)"
   when: manual
   tags:
     - ci-cd
