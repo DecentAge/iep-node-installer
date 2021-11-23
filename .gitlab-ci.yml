@@ -62,7 +62,7 @@ build-mac:
   image: adoptopenjdk/openjdk11:alpine-slim
   stage: build
   before_script:
-    - |
+    - |--target <branch>
       apk add --update --quiet --no-cache bash
   script:
     - |
@@ -108,18 +108,19 @@ create-github-release:
    
       echo "Creating release ${RELEASE_VERSION}"
       RELEASE_DESCRIPTION_PATH=${PWD}/iep-node-artifacts/CHANGELOG-${RELEASE_VERSION}.md
-      gh release create $RELEASE_VERSION --target master --title "$RELEASE_VERSION ($RELEASE_NAME)" --notes-file ${RELEASE_DESCRIPTION_PATH}
+      gh release create $RELEASE_VERSION --branch $CI_COMMIT_REF_NAME  --target master --title "$RELEASE_VERSION ($RELEASE_NAME)" --notes-file ${RELEASE_DESCRIPTION_PATH}
 
       upload_release_file() {
         local file_path=$1
+        local file_label=$2
         echo "Uploading ${file_path}"
-        gh release upload $RELEASE_VERSION ${file_path} --clobber || "Echo couldn't upload ${file_path} for release ${RELEASE_VERSION}"
+        gh release upload $RELEASE_VERSION "${file_path}#${file_label}"  --clobber || "Echo couldn't upload ${file_path} for release ${RELEASE_VERSION}"
       }
 
 
       ls -alt ./build/distributions/
-      upload_release_file ./build/distributions/iep-node-installer.exe
-      upload_release_file ./build/distributions/iep-node-installer.run
+      upload_release_file ./build/distributions/iep-node-installer.exe "Windows(x64)"
+      upload_release_file ./build/distributions/iep-node-installer.run "Linux(x64)"
       #upload_file ./build/distributions/iep-node-installer.app
   when: manual
   tags:
