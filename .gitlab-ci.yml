@@ -12,7 +12,7 @@ download-artifacts:
   script:
     - echo "CI_COMMIT_REF_NAME=${CI_COMMIT_REF_NAME}"
     - ls -alt iep-node-artifacts
-    ls -alt downloads
+    - ls -alt downloads
   needs:
     - project: infinity-economics/iep-node
       ref: ${CI_COMMIT_REF_NAME}
