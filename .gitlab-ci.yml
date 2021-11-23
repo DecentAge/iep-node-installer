@@ -12,7 +12,6 @@ download-artifacts:
   script:
     - echo "CI_COMMIT_REF_NAME=${CI_COMMIT_REF_NAME}"
     - ls -alt iep-node-artifacts
-    - ls -alt downloads
   needs:
     - project: infinity-economics/iep-node
       ref: ${CI_COMMIT_REF_NAME}
@@ -28,6 +27,7 @@ build-windows:
   before_script:
     - |
       apk add --update --no-cache bash python3 py3-pip
+      ls -alt downloads
   script:
     - |
       ls -alt ${PWD}/iep-node-artifacts
