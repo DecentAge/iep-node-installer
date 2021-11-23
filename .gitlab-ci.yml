@@ -117,11 +117,9 @@ create-github-release:
         gh release upload $RELEASE_VERSION "${file_path}#${file_label}"  --clobber || "Echo couldn't upload ${file_path} for release ${RELEASE_VERSION}"
       }
 
-
-      ls -alt ./build/distributions/
       upload_release_file ./build/distributions/iep-node-installer.exe "Windows(x64)"
       upload_release_file ./build/distributions/iep-node-installer.run "Linux(x64)"
-      #upload_file ./build/distributions/iep-node-installer.app
+      upload_release_file ./build/distributions/iep-node-installer.zip "MacOS(x64)
   when: manual
   tags:
     - ci-cd

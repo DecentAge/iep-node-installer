@@ -179,7 +179,7 @@ task createMacInstaller(dependsOn: ["unzipMacLibs","izPackCreateInstaller"]) {
      exec {
      	  workingDir "${projectDir}/izpack"
           executable "${projectDir}/izpack/create-mac-pkg.sh"
-      }
+     }
   }
 }
 
@@ -201,6 +201,17 @@ task createWindowsInstaller(dependsOn: ["unzipWindowsLibs","izPackCreateInstalle
   }
 }
 
-//jar.dependsOn izPackCreateInstaller
+task createMacInstallerZip(dependsOn: createMacInstaller, type: Zip) {
+    doFirst {
+        println "Zipping distributions/iep-node-installer.app"
+    }
+    from layout.buildDirectory.dir('distributions')
+    include "iep-node-installer.app/**"
+    archiveFileName = "iep-node-installer.zip"
+    destinationDirectory = layout.buildDirectory.dir('distributions')
+}
 
+
+//jar.dependsOn izPackCreateInstaller
+createMacInstallerZip.mustRunAfter createMacInstaller
 izPackCreateInstaller.mustRunAfter unzipMacLibs,downloadLinuxLibs,unzipWindowsLibs
