@@ -1,6 +1,7 @@
 stages:
   - prepare
   - build
+  - release
 
 
 download-artifacts:
@@ -95,8 +96,10 @@ create-github-release:
       echo "Creating release ${RELEASE_VERSION}"
       gh release create $RELEASE_VERSION --target master --title "$RELEASE_VERSION ($RELEASE_NAME)" --notes-file ${RELEASE_DESCRIPTION_PATH}
 
-      echo "Uploading build/$RELEASE_DOCKER_IMAGE_FILE_NAME"
-      gh release upload $RELEASE_VERSION build/$RELEASE_DOCKER_IMAGE_FILE_NAME --clobber || "Echo couldn't upload $RELEASE_VERSION build/$RELEASE_DOCKER_IMAGE_FILE_NAME"
+      upload_file {
+        local file_path=$1
+        echo "Uploading ${file_path}"
+        gh release upload $RELEASE_VERSION ${file_path} --clobber || "Echo couldn't upload $RELEASE_VERSION ${file_path}"
+      }
 
-      echo "Uploading build/$RELEASE_PACKAGE_FILE_NAME"
-      gh release upload $RELEASE_VERSION build/$RELEASE_PACKAGE_FILE_NAME --clobber || "Echo couldn't upload $RELEASE_VERSION Uploading build/$RELEASE_PACKAGE_FILE_NAME"
+      upload_file ./build/distributions/iep-node-installer.app
