@@ -28,6 +28,7 @@ build-windows:
     - |
       apk add --update --quiet --no-cache bash python3 py3-pip
       ls -alt downloads
+      ./build/distributions
   script:
     - |
       ls -alt ${PWD}/iep-node-artifacts
@@ -88,7 +89,7 @@ create-github-release:
       GH_VERSION=1.14.0
       apk add --no-cache git wget rsync curl && \
       wget --quiet https://github.com/cli/cli/releases/download/v${GH_VERSION}/gh_${GH_VERSION}_linux_amd64.tar.gz && \
-      tar -zxvf gh_${GH_VERSION}_linux_amd64.tar.gz && \
+      tar -zxf gh_${GH_VERSION}_linux_amd64.tar.gz && \
       chmod +x gh_${GH_VERSION}_linux_amd64/bin/gh && \
       rsync -az --remove-source-files gh_${GH_VERSION}_linux_amd64/bin/ /usr/bin
   script:
