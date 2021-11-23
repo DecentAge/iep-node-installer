@@ -68,7 +68,7 @@ build-mac:
       ./create-mac-installer.sh ${PWD}/iep-node-artifacts
   artifacts:
     paths:
-      - ./build/distributions/iep-node-installer.app
+      - ./build/distributions/iep-node-installer.zip
   cache:
     key: mac_downloads
     paths:
