@@ -27,12 +27,11 @@ build-windows:
   before_script:
     - |
       apk add --update --quiet --no-cache bash python3 py3-pip
-      ls -alt downloads
-      ./build/distributions
   script:
     - |
       ls -alt ${PWD}/iep-node-artifacts
       ./create-win-installer.sh ${PWD}/iep-node-artifacts
+      ls -alt build/distributions
   artifacts:
     paths:
       - ./build/distributions/iep-installer-node.exe
