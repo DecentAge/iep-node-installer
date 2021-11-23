@@ -96,13 +96,13 @@ create-github-release:
       #echo "Waiting 8 seconds to sync GitLab -> Github"
       #sleep 8	  
    
-      echo "Creating release ${RELEASE_VERSION}"
-      gh release create $RELEASE_VERSION --target master --title "$RELEASE_VERSION ($RELEASE_NAME)" --notes-file ${RELEASE_DESCRIPTION_PATH}
+      #echo "Creating release ${RELEASE_VERSION}"
+      #gh release create $RELEASE_VERSION --target master --title "$RELEASE_VERSION ($RELEASE_NAME)" --notes-file ${RELEASE_DESCRIPTION_PATH}
 
-      upload_file {
-        local file_path=$1
-        echo "Uploading ${file_path}"
-        gh release upload $RELEASE_VERSION ${file_path} --clobber || "Echo couldn't upload $RELEASE_VERSION ${file_path}"
-      }
+      #upload_file {
+      #  local file_path=$1
+      #  echo "Uploading ${file_path}"
+      #  gh release upload $RELEASE_VERSION ${file_path} --clobber || "Echo couldn't upload $RELEASE_VERSION ${file_path}"
+      #}
 
-      upload_file ./build/distributions/iep-node-installer.app
+      #upload_file ./build/distributions/iep-node-installer.app
