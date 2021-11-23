@@ -5,13 +5,11 @@ stages:
 
 variables:
   RELEASE_NAME: "Lithium"
-  RELEASE_DESCRIPTION_PATH: "./CHANGELOG.md"
 
 download-artifacts:
   stage: prepare
   script:
     - echo "CI_COMMIT_REF_NAME=${CI_COMMIT_REF_NAME}"
-    - ls -alt iep-node-artifacts
   needs:
     - project: infinity-economics/iep-node
       ref: ${CI_COMMIT_REF_NAME}
@@ -29,9 +27,7 @@ build-windows:
       apk add --update --quiet --no-cache bash python3 py3-pip
   script:
     - |
-      ls -alt ${PWD}/iep-node-artifacts
       ./create-win-installer.sh ${PWD}/iep-node-artifacts
-      ls -alt build/distributions
   artifacts:
     paths:
       - ./build/distributions/iep-installer-node.exe
@@ -110,6 +106,7 @@ create-github-release:
       #sleep 8	  
    
       echo "Creating release ${RELEASE_VERSION}"
+      RELEASE_DESCRIPTION_PATH=${PWD}/iep-node-artifacts/CHANGELOG-${RELEASE_VERSION}.md
       gh release create $RELEASE_VERSION --target master --title "$RELEASE_VERSION ($RELEASE_NAME)" --notes-file ${RELEASE_DESCRIPTION_PATH}
 
       #upload_file {
