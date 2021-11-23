@@ -86,7 +86,7 @@ create-github-release:
     - |
       GH_VERSION=1.14.0
       apk add --no-cache git wget rsync curl && \
-      wget https://github.com/cli/cli/releases/download/v${GH_VERSION}/gh_${GH_VERSION}_linux_amd64.tar.gz && \
+      wget --quiet https://github.com/cli/cli/releases/download/v${GH_VERSION}/gh_${GH_VERSION}_linux_amd64.tar.gz && \
       tar -zxvf gh_${GH_VERSION}_linux_amd64.tar.gz && \
       chmod +x gh_${GH_VERSION}_linux_amd64/bin/gh && \
       rsync -az --remove-source-files gh_${GH_VERSION}_linux_amd64/bin/ /usr/bin
@@ -97,6 +97,8 @@ create-github-release:
 
       export GH_REPO=github.com/DecentAge/${CI_PROJECT_NAME}
       export GITHUB_TOKEN="${GITHUB_TOKEN}"
+
+      echo "TESSSSSST ${GITHUB_TOKEN}"
 
       gh config set prompt disabled	
       echo "Deleting release ${RELEASE_VERSION}"
