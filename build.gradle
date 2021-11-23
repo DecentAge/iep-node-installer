@@ -155,7 +155,7 @@ task unzipMacLibs(dependsOn: downloadMacLibs, type: Copy) {
   doFirst {
     println "Unzipping mac libs...."
     println "Deleting ${downloadFolder}/mac_unpack"
-    delete "${downloadFolder}/mac_unpack}"
+    delete "${downloadFolder}/mac_unpack"
   }
   
   from tarTree("${downloadFolder}/${envConfig.jreBundleFileName}")
