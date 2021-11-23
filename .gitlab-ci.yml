@@ -12,6 +12,7 @@ download-artifacts:
   script:
     - echo "CI_COMMIT_REF_NAME=${CI_COMMIT_REF_NAME}"
     - ls -alt iep-node-artifacts
+    ls -alt downloads
   needs:
     - project: infinity-economics/iep-node
       ref: ${CI_COMMIT_REF_NAME}
@@ -96,9 +97,7 @@ create-github-release:
       gh --version
 
       export GH_REPO=github.com/DecentAge/${CI_PROJECT_NAME}
-      export GITHUB_TOKEN="${GITHUB_TOKEN}"
-
-      echo "TESSSSSST ${GITHUB_TOKEN}"
+      export GITHUB_TOKEN="123456"
 
       gh config set prompt disabled	
       echo "Deleting release ${RELEASE_VERSION}"
