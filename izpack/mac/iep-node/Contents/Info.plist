@@ -9,9 +9,9 @@
 	<key>CFBundleAllowMixedLocalizations</key>
 	<true/>
 	<key>CFBundleExecutable</key>
-	<string>ardor</string>
+	<string>iep</string>
 	<key>CFBundleIconFile</key>
-	<string>ardor</string>
+	<string>xin_icon_128x128.png</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.jelurida.ardor.runtime</string>
 	<key>CFBundleInfoDictionaryVersion</key>
