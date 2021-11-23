@@ -26,7 +26,7 @@ build-windows:
   stage: build
   before_script:
     - |
-      apk add --update --no-cache bash python3 py3-pip
+      apk add --update --quiet --no-cache bash python3 py3-pip
       ls -alt downloads
   script:
     - |
@@ -97,7 +97,7 @@ create-github-release:
       gh --version
 
       export GH_REPO=github.com/DecentAge/${CI_PROJECT_NAME}
-      export GITHUB_TOKEN="123456"
+      export GITHUB_TOKEN="${GITHUB_TOKEN}"
 
       gh config set prompt disabled	
       echo "Deleting release ${RELEASE_VERSION}"
@@ -119,3 +119,6 @@ create-github-release:
       #}
 
       #upload_file ./build/distributions/iep-node-installer.app
+  when: manual
+  tags:
+    - ci-cd
