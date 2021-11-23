@@ -107,7 +107,7 @@ create-github-release:
    
       echo "Creating release ${RELEASE_VERSION}"
       RELEASE_DESCRIPTION_PATH=${PWD}/iep-node-artifacts/CHANGELOG-${RELEASE_VERSION}.md
-      gh release create $RELEASE_VERSION --branch $CI_COMMIT_REF_NAME  --target master --title "$RELEASE_VERSION ($RELEASE_NAME)" --notes-file ${RELEASE_DESCRIPTION_PATH}
+      gh release create $RELEASE_VERSION --target $CI_COMMIT_REF_NAME  --target master --title "$RELEASE_VERSION ($RELEASE_NAME)" --notes-file ${RELEASE_DESCRIPTION_PATH}
 
       upload_release_file() {
         local file_path=$1
