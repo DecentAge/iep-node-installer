@@ -112,9 +112,11 @@ create-github-release:
       upload_release_file() {
         local file_path=$1
         echo "Uploading ${file_path}"
-        gh release upload $RELEASE_VERSION ${file_path} --clobber || "Echo couldn't upload $RELEASE_VERSION ${file_path}"
+        gh release upload $RELEASE_VERSION ${file_path} --clobber || "Echo couldn't upload ${file_path} for release ${RELEASE_VERSION}"
       }
 
+
+      ls -alt ./build/distributions/
       upload_release_file ./build/distributions/iep-node-installer.exe
       upload_release_file ./build/distributions/iep-node-installer.run
       #upload_file ./build/distributions/iep-node-installer.app
