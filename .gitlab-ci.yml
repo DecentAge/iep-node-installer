@@ -3,6 +3,9 @@ stages:
   - build
   - release
 
+variables:
+  RELEASE_NAME: "Lithium"
+  RELEASE_DESCRIPTION_PATH: "./CHANGELOG.md"
 
 download-artifacts:
   stage: prepare
@@ -87,11 +90,11 @@ create-github-release:
       echo "Deleting release ${RELEASE_VERSION}"
       gh release delete ${RELEASE_VERSION} || echo "Could not delete release ${RELEASE_VERSION}"
 
-      #echo "Deleting tag ${RELEASE_VERSION}"
-      #curl --request DELETE --header "PRIVATE-TOKEN: $WRITE_API_PAT" "${CI_API_V4_URL}/progithub publishjects/${CI_PROJECT_ID}/tags/${RELEASE_VERSION}" || "Could not delete tag ${RELEASE_VERSION}"
+      echo "Deleting tag ${RELEASE_VERSION}"
+      curl --request DELETE --header "PRIVATE-TOKEN: $WRITE_API_PAT" "${CI_API_V4_URL}/progithub publishjects/${CI_PROJECT_ID}/tags/${RELEASE_VERSION}" || "Could not delete tag ${RELEASE_VERSION}"
 
-      #echo "Waiting 8 seconds to sync GitLab -> Github"
-      #sleep 8	  
+      echo "Waiting 8 seconds to sync GitLab -> Github"
+      sleep 8	  
    
       echo "Creating release ${RELEASE_VERSION}"
       gh release create $RELEASE_VERSION --target master --title "$RELEASE_VERSION ($RELEASE_NAME)" --notes-file ${RELEASE_DESCRIPTION_PATH}
