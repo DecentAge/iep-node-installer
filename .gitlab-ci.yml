@@ -43,7 +43,7 @@ build-linux:
   stage: build
   before_script:
     - |
-      apk add --update --no-cache bash
+      apk add --update --quiet --no-cache bash
   script:
     - |
       ./create-linux-installer.sh ${PWD}/iep-node-artifacts
@@ -62,7 +62,7 @@ build-mac:
   stage: build
   before_script:
     - |
-      apk add --update --no-cache bash
+      apk add --update --quiet --no-cache bash
   script:
     - |
       ./create-mac-installer.sh ${PWD}/iep-node-artifacts
@@ -82,7 +82,7 @@ create-github-release:
   before_script:
     - |
       GH_VERSION=1.14.0
-      apk add --no-cache git wget rsync curl && \
+      apk add --no-cache --quiet git wget rsync curl && \
       wget --quiet https://github.com/cli/cli/releases/download/v${GH_VERSION}/gh_${GH_VERSION}_linux_amd64.tar.gz && \
       tar -zxf gh_${GH_VERSION}_linux_amd64.tar.gz && \
       chmod +x gh_${GH_VERSION}_linux_amd64/bin/gh && \
@@ -115,6 +115,8 @@ create-github-release:
         gh release upload $RELEASE_VERSION ${file_path} --clobber || "Echo couldn't upload $RELEASE_VERSION ${file_path}"
       }
 
+      upload_file ./build/distributions/iep-node-installer.exe
+      upload_file ./build/distributions/iep-node-installer.run
       #upload_file ./build/distributions/iep-node-installer.app
   when: manual
   tags:
