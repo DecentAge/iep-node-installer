@@ -68,7 +68,7 @@ build-mac:
       ./create-mac-installer.sh ${PWD}/iep-node-artifacts
   artifacts:
     paths:
-      - ./build/distributions/iep-node-installer.zip
+      - ./build/distributions/iep-node-installer.tar.gz
   cache:
     key: mac_downloads
     paths:
@@ -116,9 +116,9 @@ create-github-release:
         gh release upload $RELEASE_VERSION "${file_path}#${file_label}"  --clobber || "Echo couldn't upload ${file_path} for release ${RELEASE_VERSION}"
       }
 
-      upload_release_file ./build/distributions/iep-node-installer.exe "Windows(x64)"
-      upload_release_file ./build/distributions/iep-node-installer.run "Linux(x64)"
-      upload_release_file ./build/distributions/iep-node-installer.zip "MacOS(x64)"
+      upload_release_file ./build/distributions/iep-node-installer.exe "Windows (x64)"
+      upload_release_file ./build/distributions/iep-node-installer.run "Linux (x64)"
+      upload_release_file ./build/distributions/iep-node-installer.tar.gz "MacOS (x64)"
   when: manual
   tags:
     - ci-cd

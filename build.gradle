@@ -201,17 +201,18 @@ task createWindowsInstaller(dependsOn: ["unzipWindowsLibs","izPackCreateInstalle
   }
 }
 
-task createMacInstallerZip(dependsOn: createMacInstaller, type: Zip) {
+task createMacInstallerTar(dependsOn: createMacInstaller, type: Tar) {
     doFirst {
-        println "Zipping distributions/iep-node-installer.app"
+        println "Tar distributions/iep-node-installer.app"
     }
     from layout.buildDirectory.dir('distributions')
     include "iep-node-installer.app/**"
-    archiveFileName = "iep-node-installer.zip"
+    archiveFileName = "iep-node-installer.tar.gz"
     destinationDirectory = layout.buildDirectory.dir('distributions')
+    compression = Compression.GZIP
 }
 
 
 //jar.dependsOn izPackCreateInstaller
-createMacInstallerZip.mustRunAfter createMacInstaller
+createMacInstallerTar.mustRunAfter createMacInstaller
 izPackCreateInstaller.mustRunAfter unzipMacLibs,downloadLinuxLibs,unzipWindowsLibs
