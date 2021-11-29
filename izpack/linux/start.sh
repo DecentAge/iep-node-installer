@@ -2,7 +2,7 @@
 
 export INSTALL_DIR=$(cd "$(dirname "$0")/.." && pwd -P);
 export JAVA_HOME=${INSTALL_DIR}/jre
-export WORK_DIR=$(readlink -f  ~/.xin)
+export WORK_DIR=$(readlink -f  ~/.iep)
 
 echo "INSTALL_DIR=${INSTALL_DIR}"
 echo "JAVA_HOME=${JAVA_HOME}"

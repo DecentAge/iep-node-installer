@@ -8,7 +8,7 @@
 		<property file="@{iep.targetOs}.properties" prefix="iep" />
 	</properties>
 	<logging>
-		<log-file pattern="${USER_HOME}/.xin/logs/installation.log" append="true" mkdirs="true" level="INFO" />
+		<log-file pattern="${USER_HOME}/.iep/logs/installation.log" append="true" mkdirs="true" level="INFO" />
 	</logging>
 	<info>
 		<appname>IEP</appname>
@@ -207,13 +207,13 @@
 					<exclude name="conf/**" />
 				</archivefileset>
 			</file>
-			<singlefile src="@{iep.node.path}/conf/custom.properties" target="${USER_HOME}/.xin/conf/custom.properties" override="true" />
-			<singlefile src="@{iep.node.path}/conf/templates/installer.properties" target="${USER_HOME}/.xin/conf/installer.properties" override="true" />
-			<singlefile src="@{iep.node.path}/src/main/resources/log4j2.xml" target="${USER_HOME}/.xin/conf/log4j2.xml" override="true" />
+			<singlefile src="@{iep.node.path}/conf/custom.properties" target="${USER_HOME}/.iep/conf/custom.properties" override="true" />
+			<singlefile src="@{iep.node.path}/conf/templates/installer.properties" target="${USER_HOME}/.iep/conf/installer.properties" override="true" />
+			<singlefile src="@{iep.node.path}/src/main/resources/log4j2.xml" target="${USER_HOME}/.iep/conf/log4j2.xml" override="true" />
 
-			<fileset dir="logs" targetdir="${USER_HOME}/.xin/logs" override="true" />
-			<executable targetfile="${USER_HOME}/.xin/logs" />
-			<parsable targetfile="${USER_HOME}/.xin/conf/installer.properties" type="plain" />
+			<fileset dir="logs" targetdir="${USER_HOME}/.iep/logs" override="true" />
+			<executable targetfile="${USER_HOME}/.iep/logs" />
+			<parsable targetfile="${USER_HOME}/.iep/conf/installer.properties" type="plain" />
 			<updatecheck/>
 		</pack>
 

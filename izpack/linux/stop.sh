@@ -1,6 +1,6 @@
 #!/bin/sh
 
-export WORK_DIR=$(readlink -f  ~/.xin)
+export WORK_DIR=$(readlink -f  ~/.iep)
 echo "WORK_DIR=${WORK_DIR}"
 
 if [ -e ${WORK_DIR}/%{xin.app.name}.pid ]; then

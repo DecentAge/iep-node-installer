@@ -8,5 +8,5 @@
   <stoptimeout>50 sec</stoptimeout>
   <stopparentprocessfirst>true</stopparentprocessfirst>
   <workingdirectory>${INSTALL_PATH}</workingdirectory>
-  <logpath>${USER_HOME}\.xin\logs</logpath>
+  <logpath>${USER_HOME}\.iep\logs</logpath>
 </service>
