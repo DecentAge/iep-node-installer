@@ -222,7 +222,7 @@
 		</pack>
 
 		<pack name="server.mac" os="mac" required="yes">
-			<description>Unix Specific Resources</description>
+			<description>Mac Specific Resources</description>
 			<os family="mac" />
 			
 			<executable targetfile="${INSTALL_PATH}/jre/Home/bin/java" failure="abort" keep="true" />
@@ -248,7 +248,7 @@
 			
 		
 			<description>Unix Specific Resources</description>
-			<os family="mac" />
+			<os family="unix" />
 			
 			<executable targetfile="${INSTALL_PATH}/jre/bin/java" failure="abort" keep="true" />
 			
