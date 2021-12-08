@@ -102,8 +102,8 @@ create-github-release:
       #echo "Deleting tag ${RELEASE_VERSION}"
       #curl --request DELETE --header "PRIVATE-TOKEN: $WRITE_API_PAT" "${CI_API_V4_URL}/progithub publishjects/${CI_PROJECT_ID}/tags/${RELEASE_VERSION}" || "Could not delete tag ${RELEASE_VERSION}"
 
-      #echo "Waiting 8 seconds to sync GitLab -> Github"
-      #sleep 8	  
+      echo "Waiting 4 seconds to sync GitLab -> Github"
+      sleep 4	  
    
       echo "Creating release ${RELEASE_VERSION}"
       RELEASE_DESCRIPTION_PATH=${PWD}/iep-node-artifacts/CHANGELOG-${RELEASE_VERSION}.md
