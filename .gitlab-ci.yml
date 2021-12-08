@@ -5,6 +5,7 @@ stages:
 
 variables:
   RELEASE_NAME: "Lithium"
+  RELEASE_VERSION: "0.3.3"
 
 download-artifacts:
   stage: prepare
@@ -152,7 +153,7 @@ create-gitlab-release:
       echo "Creating release ${RELEASE_VERSION}"
   release:
     name: "$RELEASE_VERSION ($RELEASE_NAME)"
-    description: "$RELEASE_DESCRIPTION_PATH"
+    description: "${PWD}/iep-node-artifacts/CHANGELOG-${RELEASE_VERSION}.md"
     tag_name: "$RELEASE_VERSION"
 #    milestones:
 #      - "$RELEASE_VERSION ($RELEASE_NAME) ${CI_PROJECT_ID}"
