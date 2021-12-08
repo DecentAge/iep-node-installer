@@ -53,6 +53,10 @@
 			<name>iep.targetOs</name>
 			<value>mac</value>
 		</condition>
+		
+	    <condition type="not" id="not.mac">
+	  	   <condition type="ref" refid="iep.targetOs.isMac"/>
+	    </condition>
 	</conditions>
 
 	<jar src="../build/libs/iep-node-installer.jar" stage="both" />
@@ -161,7 +165,8 @@
 		<res id="InfoPanel.info" src="@{iep.node.path}/CHANGELOG-@{iep.xin.version}.md" parse="yes" />
 		<res id="LicencePanel.licence" src="@{iep.node.path}/LICENSE.txt" />
 		<res id="Installer.image" src="images/installer_left_pane.png" />
-		<res id="shortcutSpec.xml" src="windows/shortcutSpec.xml" />
+		<res id="Unix_shortcutSpec.xml" src="linux/shortcutSpec.xml"/>
+		<res id="Win_shortcutSpec.xml" src="windows/shortcutSpec.xml"/>
 		<res id="RegistrySpec.xml" src="windows/RegistrySpec.xml" />
 		<res id="installer.langsel.img" src="images/logo_large.png" />
 		<res id="userInputSpec.xml" src="user_input_spec.xml" parse="yes" type="xml" />
@@ -192,7 +197,6 @@
 			<file src="${build.downloadsDir}/${iep.jreBundleFileName}" targetdir="${INSTALL_PATH}/jre" unpack="true" override="true">
 				<archivefileset dir="${iep.jreBundleFileDir}" />
 			</file>
-			<executable targetfile="${INSTALL_PATH}/jre/bin/java" failure="abort" keep="true" />
 
 			<file src="${build.downloadsDir}/${iep.jfxBundleFileName}" targetdir="${INSTALL_PATH}/javafx-sdk" unpack="true" override="true">
 				<archivefileset dir="javafx-sdk-${iep.jfxBundleVersion}" />
@@ -218,28 +222,36 @@
 		</pack>
 
 		<pack name="server.mac" os="mac" required="yes">
-			<description>Unix Specific Resources</description>
+			<description>Mac Specific Resources</description>
 			<os family="mac" />
+			
+			<executable targetfile="${INSTALL_PATH}/jre/Home/bin/java" failure="abort" keep="true" />
+			
 			<executable targetfile="${INSTALL_PATH}/bin/${xin.app.name}" />
 			<executable targetfile="${INSTALL_PATH}/bin/dev" />
 			
-            <fileset dir="mac/iep-node-installer/Contents" targetdir="${INSTALL_PATH}/Contents" override="true"/>		
+            <fileset dir="mac/iep-node/Contents" targetdir="${INSTALL_PATH}/Contents" override="true"/>		
 			<parsable targetfile="${INSTALL_PATH}/Contents/MacOS/iep"/>
 			<executable targetfile="${INSTALL_PATH}/Contents/MacOS/iep"/>			
 			
-			<file src="linux/start.sh" targetdir="${INSTALL_PATH}/bin" override="true" />
+			<file src="mac/start.sh" targetdir="${INSTALL_PATH}/bin" override="true" />
 			<parsable targetfile="${INSTALL_PATH}/bin/start.sh" type="shell" />
 			<executable targetfile="${INSTALL_PATH}/bin/start.sh" stage="never" failure="warn" keep="true" />
-			<file src="linux/stop.sh" targetdir="${INSTALL_PATH}/bin" override="true" />
+			<file src="mac/stop.sh" targetdir="${INSTALL_PATH}/bin" override="true" />
 			<parsable targetfile="${INSTALL_PATH}/bin/stop.sh" type="shell" />
 			<executable targetfile="${INSTALL_PATH}/bin/stop.sh" stage="uninstall" />
 			<updatecheck/>
 		</pack>
 
 
-		<pack name="server.unix" os="unix" required="yes">
+		<pack name="server.unix" os="unix" required="yes" condition="not.mac">
+			
+		
 			<description>Unix Specific Resources</description>
 			<os family="unix" />
+			
+			<executable targetfile="${INSTALL_PATH}/jre/bin/java" failure="abort" keep="true" />
+			
 			<executable targetfile="${INSTALL_PATH}/bin/${xin.app.name}" />
 			<executable targetfile="${INSTALL_PATH}/bin/dev" />
 
@@ -260,6 +272,7 @@
 			<description>Windows Specific Resources</description>
 			<os family="windows" />
 
+			<executable targetfile="${INSTALL_PATH}/jre/bin/java" failure="abort" keep="true" />
 			<!-- <singlefile src="windows/winsw.xml" target="${INSTALL_PATH}/bin/${xin.app.name}.xml" override="true" /> <parsable targetfile="${INSTALL_PATH}/bin/${xin.app.name}.xml" type="xml" /> <executable targetfile="${INSTALL_PATH}/bin/${xin.app.name}.exe" stage="uninstall" keep="true" failure="warn"> <args> <arg value="stop" 
 				/> <arg value="iep-node.xml" /> </args> </executable> <executable targetfile="${INSTALL_PATH}/bin/${xin.app.name}.exe" stage="uninstall" keep="true" failure="warn"> <args> <arg value="uninstall" /> <arg value="iep-node.xml" /> </args> </executable> <singlefile src="${build.downloadsDir}/WinSW-x64.exe" target="${INSTALL_PATH}/bin/${xin.app.name}.exe" 
 				override="true" /> <executable targetfile="${INSTALL_PATH}/bin/${xin.app.name}.exe" stage="postinstall" keep="true"> <args> <arg value="install" /> <arg value="iep-node.xml" /> </args> </executable> <executable targetfile="${INSTALL_PATH}/bin/${xin.app.name}.exe" stage="postinstall" keep="true"> <args> <arg value="start" 
