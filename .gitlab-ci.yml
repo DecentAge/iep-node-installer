@@ -124,7 +124,7 @@ create-github-release:
     - ci-cd
 
 
-create-release-gitlab:
+create-gitlab-release:
   stage: release
   image: registry.gitlab.com/gitlab-org/release-cli:latest
   before_script:
