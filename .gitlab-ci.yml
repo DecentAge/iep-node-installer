@@ -122,3 +122,51 @@ create-github-release:
   when: manual
   tags:
     - ci-cd
+
+
+create-release-gitlab:
+  stage: release
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  before_script:
+    - apk add --update --no-cache curl jq
+  script:
+    - |
+      RELEASE_VERSION=$(cat release-version.txt)
+      echo ""
+      echo "Deleting release ${RELEASE_VERSION}"
+      curl --request DELETE --header "PRIVATE-TOKEN: $WRITE_API_PAT" "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/releases/${RELEASE_VERSION}" || "Could not delete release ${RELEASE_VERSION}"
+     
+      echo "Deleting tag ${RELEASE_VERSION} if not already deleted ${RELEASE_VERSION}"
+      curl --request DELETE --header "PRIVATE-TOKEN: $WRITE_API_PAT" "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/tags/${RELEASE_VERSION}" || "Could not delete tag ${RELEASE_VERSION}"
+
+      echo "Uploading build/$RELEASE_DOCKER_IMAGE_FILE_NAME ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/iep-node-installer/${RELEASE_VERSION}/iep-node-installer.exe"
+      curl --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file ./build/distributions/iep-node-installer.exe ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/iep-node-installer/${RELEASE_VERSION}/iep-node-installer.exe
+      
+      echo "Uploading build/$RELEASE_PACKAGE_FILE_NAME ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/iep-node-installer/${RELEASE_VERSION}/iep-node-installer.run"
+      curl --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file ./build/distributions/iep-node-installer.run ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/iep-node-installer/${RELEASE_VERSION}/iep-node-installer.run
+
+      echo "Uploading build/$RELEASE_PACKAGE_FILE_NAME ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/iep-node-installer/${RELEASE_VERSION}/iep-node-installer.tar.gz"
+      curl --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file ./build/distributions/iep-node-installer.tar.gz ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/iep-node-installer/${RELEASE_VERSION}/iep-node-installer.tar.gz
+            
+      echo ""      
+      echo "Creating release ${RELEASE_VERSION}"
+  release:
+    name: "$RELEASE_VERSION ($RELEASE_NAME)"
+    description: "$RELEASE_DESCRIPTION_PATH"
+    tag_name: "$RELEASE_VERSION"
+#    milestones:
+#      - "$RELEASE_VERSION ($RELEASE_NAME) ${CI_PROJECT_ID}"
+    assets:
+      links:
+        - name: "Windows (x64)"
+          url: "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/iep-node-installer/${RELEASE_VERSION}/iep-node-installer.exe"
+          link_type: "package"
+        - name: "Linux (x64)"
+          url: "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/iep-node-installer/${RELEASE_VERSION}/iep-node-installer.run"
+          link_type: "package"
+        - name: "MacOS (x64)"
+          url: "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/iep-node-installer/${RELEASE_VERSION}/iep-node-installer.tar.gz"
+          link_type: "package"
+  when: manual
+  tags:
+    - ci-cd
