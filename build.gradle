@@ -1,6 +1,45 @@
-apply plugin: 'java'
+buildscript {
+    repositories {
+        gradlePluginPortal()
+    }
+
+    dependencies {
+        classpath 'com.bmuschko:gradle-izpack-plugin:3.2'
+    }
+}
+
+plugins {
+	id 'java'
+	id 'eclipse'
+	id 'com.bmuschko.izpack' version '3.2'
+	id 'de.undercouch.download' version '4.1.2'
+}
+
 apply plugin: 'com.bmuschko.izpack'
-apply plugin: 'eclipse'
+
+def loadProperties() {
+
+    if (project.hasProperty("nodeProjectPath")) {
+            println "Our input argument with project property ["+project.getProperty("nodeProjectPath")+"]"
+    }
+
+    def nodeProjectPath = project.hasProperty("nodeProjectPath") ? project.getProperty("nodeProjectPath") : "../iep-node"
+    def environment = project.hasProperty('env') ? env : 'linux'
+    println "Current Environment: " + environment
+    project.ext.envConfig  = new Properties()
+    project.ext.envConfig.name=environment
+    project.ext.envConfig.nodeProjectPath=nodeProjectPath
+    file(environment+".properties").withInputStream {
+        project.ext.envConfig.load(it) 
+    }
+}
+
+loadProperties()
+
+ext {
+    downloadFolder = file("${projectDir}/downloads")
+    jreBundleUnderlineVersion=envConfig.jreBundleVersion.replaceAll('\\+','_')
+}
 
 eclipse {
     classpath {
@@ -11,16 +50,6 @@ eclipse {
 
 repositories {
     jcenter()
-}
-
-buildscript {
-    repositories {
-        gradlePluginPortal()
-    }
-
-    dependencies {
-        classpath 'com.bmuschko:gradle-izpack-plugin:3.2'
-    }
 }
 
 sourceCompatibility = 11
@@ -38,58 +67,152 @@ dependencies {
     compileOnly 'org.bidib.org.codehaus.izpack:izpack-compiler:5.2.0.M2'
 }
 
+izpack {
+    baseDir = file("izpack")
+    installFile = file("izpack/install.xml")
+    outputFile = file("${buildDir}/distributions/iep-node-installer.jar")
+    compression = 'default'
+    compressionLevel = 9
+    appProperties = [
+    "iep.node.path": file(envConfig.nodeProjectPath), 
+    "iep.targetOs" : envConfig.name
+    ]
+}
 
-task unzipIzpackUtils(type: Copy) {
-    print "FILE=" + configurations.izpackUtils.singleFile
+task unpackSharedLibs(dependsOn: jar, type: Copy) {
+    println "Unpack shared libs...."
     def outputDir = file("${buildDir}/izpack-utils")
     from zipTree(configurations.izpackUtils.singleFile)
     into outputDir
 }
 
-izpack {
-    baseDir = file("./izpack")
-    installFile = file('./izpack/install.xml')
-    //outputFile = file("$buildDir/distributions/iep-node-${version}-installer.jar")
-    outputFile = file("${buildDir}/distributions/iep-node-installer.jar")
-    compression = 'deflate'
-    compressionLevel = 9
-    appProperties = ["iep.node.path": file("../iep-node")]
-    //appProperties = ['app.group': 'Griffon', 'app.name': 'griffon', 'app.title': 'Griffon',
-    //                 'app.version': version, 'app.subpath': "Griffon-$version"]
+/*
+task izPackCreateInstallerTrigger(dependsOn: unpackSharedLibs) {
+	inputs.file file("../iep-node/build/iep-node.zip")
+}
+
+izPackCreateInstaller.dependsOn izPackCreateInstallerTrigger
+*/
+
+task downloadLinuxLibs(dependsOn: unpackSharedLibs, type: Download) {
+    doFirst {
+        println "Downloading linux libs...."
+    }
+	downloadFolder.mkdirs()
+    src([
+        "https://phoenixnap.dl.sourceforge.net/project/dos2unix/dos2unix/7.3.3/dos2unix-7.3.3.tar.gz",
+        "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-${envConfig.jreBundleVersion}/${envConfig.jreBundleFileName}",
+        "https://download2.gluonhq.com/openjfx/${envConfig.jfxBundleVersion}/${envConfig.jfxBundleFileName}"
+    ])
+
+    dest downloadFolder
+    onlyIfModified true
+    overwrite false
+}
+
+/*task unpackLinuxLibs(dependsOn: downloadLinuxLibs, type: Copy) {
+	fileTree(dir: "${downloadFolder}").include('*.tar.gz').each { tarFile ->
+	   copy {
+	      println "Untar $tarFile.name"
+	      def name = tarFile.name - '.tar.gz'
+	      from tarTree("${downloadFolder}/${tarFile.name}")
+	      into "${downloadFolder}"       
+	   }
+	}
+}*/
+
+task downloadMacLibs(dependsOn: unpackSharedLibs, type: Download) {
+    doFirst {
+        println "Downloading mac libs...."
+    }
+	downloadFolder.mkdirs()
+    src([
+        "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-${envConfig.jreBundleVersion}/${envConfig.jreBundleFileName}",
+        "https://download2.gluonhq.com/openjfx/${envConfig.jfxBundleVersion}/${envConfig.jfxBundleFileName}"
+    ])
+    dest downloadFolder
+    onlyIfModified true
+    overwrite false
+} 
+
+task downloadWindowsLibs(dependsOn: unpackSharedLibs, type: Download) {
+    doFirst {
+        println "Downloading windows libs...."
+    }
+	downloadFolder.mkdirs()
+    src([
+        "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-${envConfig.jreBundleVersion}/${envConfig.jreBundleFileName}",
+        "https://github.com/winsw/winsw/releases/download/v2.11.0/WinSW-x64.exe",
+        "https://download2.gluonhq.com/openjfx/${envConfig.jfxBundleVersion}/${envConfig.jfxBundleFileName}"
+    ])
+    dest downloadFolder
+    onlyIfModified true
+    overwrite false
+} 
+
+
+task unzipMacLibs(dependsOn: downloadMacLibs, type: Copy) {
+  doFirst {
+    println "Unzipping mac libs...."
+    println "Deleting ${downloadFolder}/mac_unpack"
+    delete "${downloadFolder}/mac_unpack"
+  }
+  
+  from tarTree("${downloadFolder}/${envConfig.jreBundleFileName}")
+  into "${downloadFolder}/mac_unpack"
 }
 
 
-task buildInstallerApp() {
+task unzipWindowsLibs(dependsOn: downloadWindowsLibs, type: Copy) {
+  doFirst {
+    println "Unzipping windows libs...."
+    println "Deleting ${downloadFolder}/win_unpack"
+    delete "${downloadFolder}/win_unpack"
+  }
+
+  from zipTree("${downloadFolder}/${envConfig.jreBundleFileName}")
+  into "${downloadFolder}/win_unpack"
+}
+
+task createMacInstaller(dependsOn: ["unzipMacLibs","izPackCreateInstaller"]) {
   doLast {
      exec {
-          executable "./izpack/build-app.sh"
+     	  workingDir "${projectDir}/izpack"
+          executable "${projectDir}/izpack/create-mac-pkg.sh"
+     }
+  }
+}
+
+task createLinuxInstaller(dependsOn: ["downloadLinuxLibs","izPackCreateInstaller"]) {
+  doLast {
+     exec {
+     	  workingDir "${projectDir}/izpack"
+          executable "${projectDir}/izpack/create-linux-pkg.sh"
       }
   }
 }
 
-task buildInstallerRunner() {
-  doLast {
-     exec {
-          executable "./izpack/build-run.sh"
-      }
+task createWindowsInstaller(dependsOn: ["unzipWindowsLibs","izPackCreateInstaller"]) {
+  doLast() {
+    exec {
+        workingDir "${projectDir}/izpack"
+        executable "${projectDir}/izpack/create-windows-pkg.sh"
+    }
   }
 }
 
-task buildInstallerExe() {
-  doLast {
-     exec {
-          executable "./izpack/build-exe.sh"
-      }
-  }
+task createMacInstallerTar(dependsOn: createMacInstaller, type: Tar) {
+    doFirst {
+        println "Tar distributions/iep-node-installer.app"
+    }
+    from layout.buildDirectory.dir('distributions')
+    include "iep-node-installer.app/**"
+    archiveFileName = "iep-node-installer.tar.gz"
+    destinationDirectory = layout.buildDirectory.dir('distributions')
+    compression = Compression.GZIP
 }
 
-tasks.register('createInstallers')
 
-unzipIzpackUtils.dependsOn build
-izPackCreateInstaller.dependsOn unzipIzpackUtils
-buildInstallerApp.dependsOn izPackCreateInstaller
-buildInstallerRunner.dependsOn izPackCreateInstaller
-buildInstallerExe.dependsOn izPackCreateInstaller
-
-createInstallers.dependsOn(buildInstallerApp,buildInstallerRunner,buildInstallerExe)
-
+//jar.dependsOn izPackCreateInstaller
+createMacInstallerTar.mustRunAfter createMacInstaller
+izPackCreateInstaller.mustRunAfter unzipMacLibs,downloadLinuxLibs,unzipWindowsLibs

@@ -7,7 +7,8 @@
 	<programGroup defaultName="XIN" location="startMenu"/>
 	<shortcut
 		name="Stop IEP Node"
-		target="$INSTALL_PATH\bin\stop.bat"
+		target="$INSTALL_PATH\bin\iep-node.exe"
+		commandLine="stop"
 		workingDirectory="$INSTALL_PATH"
         description="Stop node for Infinity Economics"
 		iconFile="$INSTALL_PATH\html\www\wallet\assets\images\favicon.ico"
@@ -22,7 +23,8 @@
 	
 	<shortcut
 		name="Start IEP Node"
-		target="$INSTALL_PATH\bin\start.bat"
+		target="$INSTALL_PATH\bin\iep-node.exe"
+		commandLine="start"
 		workingDirectory="$INSTALL_PATH"
         description="Start node for Infinity Economics"
 		iconFile="$INSTALL_PATH\html\www\wallet\assets\images\favicon.ico"

@@ -4,49 +4,30 @@
 	<panel id="iep.config.panel">
 		<field type="title" txt="Infinity Economics Node Config" align="left"/>
 
-		<field type="radio" variable="target.chain">
+		<field type="radio" variable="iep.installer.targetEnv">
 			<description txt="Target chain/environment" />
 			<spec>
-				<choice txt="TESTNET" id="target.chain.tetsnet" value="mainnet" set="true" />
-				<choice txt="MAINNET" id="target.chain.mainnet" value="testnet" />
+				<choice txt="MAINNET" value="mainnet" set="true"/>
+				<choice txt="TESTNET" value="testnet"/>
 			</spec>
-		</field>
-
-
-		<field type="check" variable="setup.add.lightwallet">
-			<spec txt="Start as light wallet" id="setup.add.lightwallet" true="on" false="off" set="false" />
-		</field>
-
-
-		<field type="check" variable="setup.download.snapshot">
-			<spec txt="Download the latest snapshot of the blockchain to avoid having to sync the node" id="setup.add.lightwallet" true="on" false="off" set="false" />
-		</field>
-
-		<field type="divider" />
-
-		<field type="check" variable="xin.installer.startAfterInstallation" >
-			<!-- <description id="description.start.after.installation" txt="This is a description for a check box" /> -->
-			<spec txt="Start XIN node after installation" true="true" false="false" set="false" />
 		</field>
 
 		<field type="space" />
-		<field type="divider" />
-		
-		<field type="staticText" align="left" txt="The admin password used to access restricted node funcitonalities"/>
 
-		<field type="password" align="left" variable="ADMIN_PASSWORD" >
-			<spec allowEmptyValue="false" txt="The admin password used to access restricted node funcitonalities" set="Wuff1980_s7">
-				<pwd txt="The Password:" size="18" set="" />
-				<pwd txt="Retype Password:" size="18" set="" />
+		<field type="check" variable="xin.installer.startAfterInstallation" >
+			<spec txt="Start IEP Node after installation" true="true" false="false" set="true" />
+		</field>
+		<field type="space" />
+		<field type="staticText" align="left" txt="The admin password used to access restricted node funcitonalities. The password must begin with a character and be 8-20 mixed-case characters, numbers, and special characters like #, @, !, $ or _"/>
+		<field type="password" align="left" variable="iep.installer.xin.adminPassword" txt="The password must begin with a character and be 8-20 mixed-case characters, numbers, and special characters like #, @, !, $ or _">
+			<spec allowEmptyValue="false">
+				<pwd txt="The Password:" size="20" set="" />
+				<pwd txt="Retype Password:" size="20" set="" />
 			</spec>
-			<validator class="com.izforge.izpack.panels.userinput.validator.PasswordEqualityValidator" txt="Both passwords must match." />
-			<validator class="com.izforge.izpack.panels.userinput.validator.RegularExpressionValidator" txt="The admin password must begin with a character and be 8-20 mixed-case characters, numbers, and special characters [#@!$_].">
+			<validator class="com.izforge.izpack.panels.userinput.validator.PasswordEqualityValidator" txt="Both passwords must match" />
+			<validator class="com.izforge.izpack.panels.userinput.validator.RegularExpressionValidator" txt="The admin password must begin with a character and be 8-20 mixed-case characters, numbers, and special characters like #, @, !, $ or _">
 				<param name="pattern" value="^(?=[a-zA-Z])(?=.*[0-9])(?=.*[#@!$_])(?=.*[A-Z])(?=.*[a-z])(?!.*[^a-zA-Z0-9#@!$_])(?!.*\s).{8,20}$" />
 			</validator>
 		</field>
-
-
-		<field type="staticText" align="left" txt="The test"/>
-
 	</panel>
 </izpack:userinput>
