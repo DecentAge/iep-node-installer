@@ -100,7 +100,7 @@ task downloadLinuxLibs(dependsOn: unpackSharedLibs, type: Download) {
     }
 	downloadFolder.mkdirs()
     src([
-        "https://phoenixnap.dl.sourceforge.net/project/dos2unix/dos2unix/7.3.3/dos2unix-7.3.3.tar.gz",
+        "https://sourceforge.net/projects/dos2unix/files/dos2unix/7.3.3/dos2unix-7.3.3.tar.gz",
         "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-${envConfig.jreBundleVersion}/${envConfig.jreBundleFileName}",
         "https://download2.gluonhq.com/openjfx/${envConfig.jfxBundleVersion}/${envConfig.jfxBundleFileName}"
     ])
