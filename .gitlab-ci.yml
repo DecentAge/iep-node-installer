@@ -95,7 +95,7 @@ create-github-release:
 
       export GH_REPO=github.com/DecentAge/${CI_PROJECT_NAME}
       export GH_TOKEN="${GITHUB_TOKEN}"
-      gh auth status
+
       gh config set prompt disabled	
       echo "Deleting release ${RELEASE_VERSION}"
       gh release delete ${RELEASE_VERSION} || echo "Could not delete release ${RELEASE_VERSION}"
