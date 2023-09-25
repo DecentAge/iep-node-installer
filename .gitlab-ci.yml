@@ -91,11 +91,11 @@ create-github-release:
   script:
     - |
       RELEASE_VERSION=$(cat release-version.txt)
-      rm -rf ~/.config/gh/config.yml 
       gh --version
 
       export GH_REPO=github.com/DecentAge/${CI_PROJECT_NAME}
       export GH_TOKEN="${GITHUB_TOKEN}"
+      curl -X 'POST' -u $GH_TOKEN https://github.com/DecentAge/iep-node-installer/releases/ep-node-installer-0.3.3.zip
       gh config set prompt disabled	
       echo "Deleting release ${RELEASE_VERSION}"
       gh release delete ${RELEASE_VERSION} || echo "Could not delete release ${RELEASE_VERSION}"
