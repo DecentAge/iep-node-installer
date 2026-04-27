@@ -20,7 +20,7 @@ mkdir -p ${BUILD_DIR}/distributions/iep-node-installer.app/Contents/Java
 cp -rvf ${BUILD_DIR}/distributions/iep-node-installer.jar ${BUILD_DIR}/distributions/iep-node-installer.app/Contents/Java
 
 mkdir -p ${BUILD_DIR}/distributions/iep-node-installer.app/Contents/PlugIns/jre
-cp -rf ${BASE_DIR}/downloads/mac_unpack/jdk-11.0.12+7-jre/* ${BUILD_DIR}/distributions/iep-node-installer.app/Contents/PlugIns/jre
+cp -rf ${BASE_DIR}/downloads/mac_unpack/jdk-21.0.5+11-jre/* ${BUILD_DIR}/distributions/iep-node-installer.app/Contents/PlugIns/jre
 
 #(cd ${BUILD_DIR}/izpack-utils/utils/wrappers/izpack2app && \
 #python3 izpack2app.py \
