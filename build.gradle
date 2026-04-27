@@ -101,7 +101,7 @@ task downloadLinuxLibs(dependsOn: unpackSharedLibs, type: Download) {
 	downloadFolder.mkdirs()
     src([
         "https://sourceforge.net/projects/dos2unix/files/dos2unix/7.3.3/dos2unix-7.3.3.tar.gz",
-        "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-${envConfig.jreBundleVersion}/${envConfig.jreBundleFileName}",
+        "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-${envConfig.jreBundleVersion}/${envConfig.jreBundleFileName}",
         "https://download2.gluonhq.com/openjfx/${envConfig.jfxBundleVersion}/${envConfig.jfxBundleFileName}"
     ])
 
@@ -127,7 +127,7 @@ task downloadMacLibs(dependsOn: unpackSharedLibs, type: Download) {
     }
 	downloadFolder.mkdirs()
     src([
-        "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-${envConfig.jreBundleVersion}/${envConfig.jreBundleFileName}",
+        "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-${envConfig.jreBundleVersion}/${envConfig.jreBundleFileName}",
         "https://download2.gluonhq.com/openjfx/${envConfig.jfxBundleVersion}/${envConfig.jfxBundleFileName}"
     ])
     dest downloadFolder
@@ -141,7 +141,7 @@ task downloadWindowsLibs(dependsOn: unpackSharedLibs, type: Download) {
     }
 	downloadFolder.mkdirs()
     src([
-        "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-${envConfig.jreBundleVersion}/${envConfig.jreBundleFileName}",
+        "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-${envConfig.jreBundleVersion}/${envConfig.jreBundleFileName}",
         "https://github.com/winsw/winsw/releases/download/v2.11.0/WinSW-x64.exe",
         "https://download2.gluonhq.com/openjfx/${envConfig.jfxBundleVersion}/${envConfig.jfxBundleFileName}"
     ])

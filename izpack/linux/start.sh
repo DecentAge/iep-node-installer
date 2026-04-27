@@ -8,6 +8,8 @@ echo "INSTALL_DIR=${INSTALL_DIR}"
 echo "JAVA_HOME=${JAVA_HOME}"
 echo "WORK_DIR=${WORK_DIR}"
 
+"${INSTALL_DIR}/scripts/check-java-version.sh" || exit 1
+
 sleep 1
 if [ -e ${WORK_DIR}/%{xin.app.name}.pid ]; then
     PID=`cat ${WORK_DIR}/%{xin.app.name}.pid`

@@ -4,6 +4,8 @@ export INSTALL_DIR=$(cd "$(dirname "$0")/.." && pwd -P);
 export JAVA_HOME=${INSTALL_DIR}/jre
 export WORK_DIR=$(readlink -f  ~/.xin)
 
+"${INSTALL_DIR}/scripts/check-java-version.sh" || exit 1
+
 sleep 1
 if [ -e ${WORK_DIR}/%{xin.app.name}.pid ]; then
     PID=`cat ${WORK_DIR}/%{xin.app.name}.pid`

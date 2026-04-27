@@ -7,6 +7,9 @@ SET JAVA_HOME=%INSTALL_DIR%\jre
 ECHO INSTALL_DIR=%INSTALL_DIR%
 ECHO JAVA_HOME=%JAVA_HOME%
 
+CALL "%INSTALL_DIR%\scripts\check-java-version.bat"
+IF ERRORLEVEL 1 EXIT /B 1
+
 WMIC Process Where "Commandline Like '%%xin.Xin%%'" get Commandline > NUL | findstr /i /c:"iep-node.jar" > NUL && (
 	echo IEP Node is already runnig
 ) || (
