@@ -3,6 +3,8 @@ package xin.installer;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.logging.Logger;
 
@@ -34,16 +36,26 @@ public class ShutdownNodeAction implements PanelAction {
 
 
 	public boolean shutdownServer(InstallData installData) {
-		
+
 		String installPath = installData.getDefaultInstallPath();
+		String stopScript;
 		String[] cmd = new String[2];
-		
+
 		if(installData.getPlatform().getName().isA(Platform.Name.UNIX) || Platform.Name.MAC.equals(installData.getPlatform().getName())) {
+			stopScript = installPath + "/bin/stop.sh";
 			cmd[0]="sh";
-			cmd[1]=installPath +"/bin/stop.sh";
+			cmd[1]=stopScript;
 		} else if(Platform.Name.WINDOWS.equals(installData.getPlatform().getName())) {
+			stopScript = installPath + "/bin/stop.bat";
 			cmd[0]="cmd.exe";
-			cmd[1]="/c "+installPath+"/bin/stop.bat";			
+			cmd[1]="/c "+stopScript;
+		} else {
+			return true;
+		}
+
+		if (!Files.exists(Paths.get(stopScript))) {
+			logger.info("No prior installation found at " + installPath + "; skipping shutdown.");
+			return true;
 		}
 
 		try {

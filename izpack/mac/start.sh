@@ -17,9 +17,8 @@ if [ -e ${WORK_DIR}/%{xin.app.name}.pid ]; then
     fi
 fi
 
-mkdir -p ${WORK_DIR}/
+mkdir -p ${WORK_DIR}/logs
 cd "${INSTALL_DIR}"
-mkdir -p logs
 echo "Starting node in ${PWD}"
 export IEP_NODE_OPTS="--module-path ${INSTALL_DIR}/javafx-sdk/lib --add-modules javafx.controls,javafx.web --add-exports javafx.web/com.sun.javafx.webkit=ALL-UNNAMED -Dxin.workDir=${WORK_DIR} -Dxin.runtime.mode=desktop"
 nohup bin/%{xin.app.name}  > ${WORK_DIR}/logs/console.log 2>&1 &

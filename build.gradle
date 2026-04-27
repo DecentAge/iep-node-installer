@@ -12,10 +12,8 @@ plugins {
 	id 'java'
 	id 'eclipse'
 	id 'com.bmuschko.izpack' version '3.2'
-	id 'de.undercouch.download' version '4.1.2'
+	id 'de.undercouch.download' version '5.7.0'
 }
-
-apply plugin: 'com.bmuschko.izpack'
 
 def loadProperties() {
 
@@ -49,7 +47,7 @@ eclipse {
 }
 
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 sourceCompatibility = 11
@@ -100,7 +98,7 @@ task downloadLinuxLibs(dependsOn: unpackSharedLibs, type: Download) {
     }
 	downloadFolder.mkdirs()
     src([
-        "https://sourceforge.net/projects/dos2unix/files/dos2unix/7.3.3/dos2unix-7.3.3.tar.gz",
+        "https://sourceforge.net/projects/dos2unix/files/dos2unix/7.5.2/dos2unix-7.5.2.tar.gz",
         "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-${envConfig.jreBundleVersion}/${envConfig.jreBundleFileName}",
         "https://download2.gluonhq.com/openjfx/${envConfig.jfxBundleVersion}/${envConfig.jfxBundleFileName}"
     ])
@@ -142,7 +140,7 @@ task downloadWindowsLibs(dependsOn: unpackSharedLibs, type: Download) {
 	downloadFolder.mkdirs()
     src([
         "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-${envConfig.jreBundleVersion}/${envConfig.jreBundleFileName}",
-        "https://github.com/winsw/winsw/releases/download/v2.11.0/WinSW-x64.exe",
+        "https://github.com/winsw/winsw/releases/download/v2.12.0/WinSW-x64.exe",
         "https://download2.gluonhq.com/openjfx/${envConfig.jfxBundleVersion}/${envConfig.jfxBundleFileName}"
     ])
     dest downloadFolder
