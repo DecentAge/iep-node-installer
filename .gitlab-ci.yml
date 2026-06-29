@@ -9,6 +9,8 @@ variables:
 
 download-artifacts:
   stage: prepare
+  tags:
+    - ci-cd
   script:
     - echo "CI_COMMIT_REF_NAME=${CI_COMMIT_REF_NAME}"
   needs:
