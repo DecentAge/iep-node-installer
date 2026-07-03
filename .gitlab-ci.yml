@@ -4,8 +4,25 @@ stages:
   - release
 
 variables:
-  RELEASE_NAME: "Lithium"
-  RELEASE_VERSION: "0.3.3"
+  # Central release name — matches the shared docker-ci-cd.yml so every release is
+  # titled "<version> (Beryllium)". RELEASE_VERSION is resolved below, not hard-coded.
+  RELEASE_NAME: "Beryllium"
+
+# Expose the real release version (release-version.txt) as a CI variable so the
+# `release:` keyword below tags THIS version instead of a hard-coded one. Without
+# this the release: block used a stale literal while the scripts uploaded the
+# release-version.txt version -> tag/asset mismatch.
+resolve-release-version:
+  image: alpine:latest
+  stage: prepare
+  script:
+    - echo "RELEASE_VERSION=$(cat release-version.txt)" > release.env
+    - cat release.env
+  artifacts:
+    reports:
+      dotenv: release.env
+  tags:
+    - ci-cd
 
 download-artifacts:
   stage: prepare
@@ -157,7 +174,7 @@ create-gitlab-release:
       echo "Creating release ${RELEASE_VERSION}"
   release:
     name: "$RELEASE_VERSION ($RELEASE_NAME)"
-    description: "${PWD}/iep-node-artifacts/CHANGELOG-${RELEASE_VERSION}.md"
+    description: "iep-node-artifacts/CHANGELOG-${RELEASE_VERSION}.md"
     tag_name: "$RELEASE_VERSION"
 #    milestones:
 #      - "$RELEASE_VERSION ($RELEASE_NAME) ${CI_PROJECT_ID}"
