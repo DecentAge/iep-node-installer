@@ -18,5 +18,5 @@ python3 izpack2exe.py \
 	--with-7z=${BUILD_DIR}/izpack-utils/utils/wrappers/izpack2exe/7zz \
 	--no-upx \
 	--name iep-node-installer \
-	--with-jdk ${BUILD_DIR}/../downloads/win_unpack/jdk-11.0.12+7-jre)
+	--with-jdk ${BUILD_DIR}/../downloads/win_unpack/jdk-21.0.5+11-jre)
 #	--with-upx=${BUILD_DIR}/izpack-utils/utils/wrappers/izpack2exe/UPX)

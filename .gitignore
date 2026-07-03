@@ -5,3 +5,11 @@
 /build/
 /.gradle/
 /downloads
+*.iml
+
+# Runtime artifacts created when bin/iep-node is launched from this directory
+/conf/
+/db/
+/logs/
+/wallet.txt
+/iep-node-artifacts/
