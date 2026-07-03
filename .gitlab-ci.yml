@@ -4,8 +4,25 @@ stages:
   - release
 
 variables:
-  RELEASE_NAME: "Lithium"
-  RELEASE_VERSION: "0.3.3"
+  # Central release name — matches the shared docker-ci-cd.yml so every release is
+  # titled "<version> (Beryllium)". RELEASE_VERSION is resolved below, not hard-coded.
+  RELEASE_NAME: "Beryllium"
+
+# Expose the real release version (release-version.txt) as a CI variable so the
+# `release:` keyword below tags THIS version instead of a hard-coded one. Without
+# this the release: block used a stale literal while the scripts uploaded the
+# release-version.txt version -> tag/asset mismatch.
+resolve-release-version:
+  image: alpine:latest
+  stage: prepare
+  script:
+    - echo "RELEASE_VERSION=$(cat release-version.txt)" > release.env
+    - cat release.env
+  artifacts:
+    reports:
+      dotenv: release.env
+  tags:
+    - ci-cd
 
 download-artifacts:
   stage: prepare
@@ -100,7 +117,7 @@ create-github-release:
 
       gh config set prompt disabled	
       echo "Deleting release ${RELEASE_VERSION}"
-      gh release delete ${RELEASE_VERSION} || echo "Could not delete release ${RELEASE_VERSION}"
+      gh release delete ${RELEASE_VERSION} -y || echo "Could not delete release ${RELEASE_VERSION}"
 
       #echo "Deleting tag ${RELEASE_VERSION}"
       #curl --request DELETE --header "PRIVATE-TOKEN: $WRITE_API_PAT" "${CI_API_V4_URL}/progithub publishjects/${CI_PROJECT_ID}/tags/${RELEASE_VERSION}" || "Could not delete tag ${RELEASE_VERSION}"
@@ -116,13 +133,15 @@ create-github-release:
         local file_path=$1
         local file_label=$2
         echo "Uploading ${file_path}"
-        gh release upload $RELEASE_VERSION "${file_path}#${file_label}"  --clobber || "Echo couldn't upload ${file_path} for release ${RELEASE_VERSION}"
+        gh release upload $RELEASE_VERSION "${file_path}#${file_label}"  --clobber || echo "couldn't upload ${file_path} for release ${RELEASE_VERSION}"
       }
 
       upload_release_file ./build/distributions/iep-node-installer.exe "Windows (x64)"
       upload_release_file ./build/distributions/iep-node-installer.run "Linux (x64)"
       upload_release_file ./build/distributions/iep-node-installer.tar.gz "MacOS (x64)"
-  when: manual
+  allow_failure: true
+  only:
+    - master
   tags:
     - ci-cd
 
@@ -137,10 +156,10 @@ create-gitlab-release:
       RELEASE_VERSION=$(cat release-version.txt)
       echo ""
       echo "Deleting release ${RELEASE_VERSION}"
-      curl --request DELETE --header "PRIVATE-TOKEN: $WRITE_API_PAT" "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/releases/${RELEASE_VERSION}" || "Could not delete release ${RELEASE_VERSION}"
+      curl --request DELETE --header "PRIVATE-TOKEN: $WRITE_API_PAT" "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/releases/${RELEASE_VERSION}" || echo "Could not delete release ${RELEASE_VERSION}"
      
       echo "Deleting tag ${RELEASE_VERSION} if not already deleted ${RELEASE_VERSION}"
-      curl --request DELETE --header "PRIVATE-TOKEN: $WRITE_API_PAT" "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/tags/${RELEASE_VERSION}" || "Could not delete tag ${RELEASE_VERSION}"
+      curl --request DELETE --header "PRIVATE-TOKEN: $WRITE_API_PAT" "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/tags/${RELEASE_VERSION}" || echo "Could not delete tag ${RELEASE_VERSION}"
 
       echo "Uploading build/$RELEASE_DOCKER_IMAGE_FILE_NAME ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/iep-node-installer/${RELEASE_VERSION}/iep-node-installer.exe"
       curl --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file ./build/distributions/iep-node-installer.exe ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/iep-node-installer/${RELEASE_VERSION}/iep-node-installer.exe
@@ -155,7 +174,7 @@ create-gitlab-release:
       echo "Creating release ${RELEASE_VERSION}"
   release:
     name: "$RELEASE_VERSION ($RELEASE_NAME)"
-    description: "${PWD}/iep-node-artifacts/CHANGELOG-${RELEASE_VERSION}.md"
+    description: "iep-node-artifacts/CHANGELOG-${RELEASE_VERSION}.md"
     tag_name: "$RELEASE_VERSION"
 #    milestones:
 #      - "$RELEASE_VERSION ($RELEASE_NAME) ${CI_PROJECT_ID}"
@@ -170,6 +189,7 @@ create-gitlab-release:
         - name: "MacOS (x64)"
           url: "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/iep-node-installer/${RELEASE_VERSION}/iep-node-installer.tar.gz"
           link_type: "package"
-  when: manual
+  only:
+    - master
   tags:
     - ci-cd
