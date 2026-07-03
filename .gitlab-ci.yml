@@ -9,6 +9,8 @@ variables:
 
 download-artifacts:
   stage: prepare
+  tags:
+    - ci-cd
   script:
     - echo "CI_COMMIT_REF_NAME=${CI_COMMIT_REF_NAME}"
   needs:
@@ -94,7 +96,7 @@ create-github-release:
       gh --version
 
       export GH_REPO=github.com/DecentAge/${CI_PROJECT_NAME}
-      export GITHUB_TOKEN="${GITHUB_TOKEN}"
+      export GH_TOKEN="${GITHUB_TOKEN}"
 
       gh config set prompt disabled	
       echo "Deleting release ${RELEASE_VERSION}"

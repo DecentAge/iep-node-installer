@@ -170,6 +170,7 @@
 		<res id="RegistrySpec.xml" src="windows/RegistrySpec.xml" />
 		<res id="installer.langsel.img" src="images/logo_large.png" />
 		<res id="userInputSpec.xml" src="user_input_spec.xml" parse="yes" type="xml" />
+		<res id="userInputLang.xml_eng" src="userInputLang.xml_eng" />
 		<res id="ProcessPanel.Spec.xml" src="process_panel_spec.xml" />
 	</resources>
 
@@ -226,11 +227,12 @@
 			<os family="mac" />
 			
 			<executable targetfile="${INSTALL_PATH}/jre/Home/bin/java" failure="abort" keep="true" />
-			
+
 			<executable targetfile="${INSTALL_PATH}/bin/${xin.app.name}" />
 			<executable targetfile="${INSTALL_PATH}/bin/dev" />
-			
-            <fileset dir="mac/iep-node/Contents" targetdir="${INSTALL_PATH}/Contents" override="true"/>		
+			<executable targetfile="${INSTALL_PATH}/scripts/check-java-version.sh" stage="never" keep="true" failure="warn" />
+
+            <fileset dir="mac/iep-node/Contents" targetdir="${INSTALL_PATH}/Contents" override="true"/>
 			<parsable targetfile="${INSTALL_PATH}/Contents/MacOS/iep"/>
 			<executable targetfile="${INSTALL_PATH}/Contents/MacOS/iep"/>			
 			
@@ -251,9 +253,10 @@
 			<os family="unix" />
 			
 			<executable targetfile="${INSTALL_PATH}/jre/bin/java" failure="abort" keep="true" />
-			
+
 			<executable targetfile="${INSTALL_PATH}/bin/${xin.app.name}" />
 			<executable targetfile="${INSTALL_PATH}/bin/dev" />
+			<executable targetfile="${INSTALL_PATH}/scripts/check-java-version.sh" stage="never" keep="true" failure="warn" />
 
 			<file src="linux/stop.sh" targetdir="${INSTALL_PATH}/bin" override="true" />
 			<parsable targetfile="${INSTALL_PATH}/bin/stop.sh" type="shell" />

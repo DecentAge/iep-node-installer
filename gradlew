@@ -18,7 +18,7 @@
 
 ##############################################################################
 ##
-##  Gradle start up script for UN*X
+##  Gradle start up script for UNIX
 ##
 ##############################################################################
 
@@ -72,7 +72,7 @@ case "`uname`" in
   Darwin* )
     darwin=true
     ;;
-  MSYS* | MINGW* )
+  MINGW* )
     msys=true
     ;;
   NONSTOP* )
