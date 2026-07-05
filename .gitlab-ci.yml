@@ -140,8 +140,9 @@ create-github-release:
       upload_release_file ./build/distributions/iep-node-installer.run "Linux (x64)"
       upload_release_file ./build/distributions/iep-node-installer.tar.gz "MacOS (x64)"
   allow_failure: true
-  only:
-    - master
+  # Only where a DecentAge GitHub mirror exists (GITHUB_RELEASE_ENABLED=true on the project).
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master" && $GITHUB_RELEASE_ENABLED == "true"'
   tags:
     - ci-cd
 
