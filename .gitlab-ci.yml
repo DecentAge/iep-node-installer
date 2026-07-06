@@ -160,7 +160,7 @@ create-gitlab-release:
       curl --request DELETE --header "PRIVATE-TOKEN: $WRITE_API_PAT" "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/releases/${RELEASE_VERSION}" || echo "Could not delete release ${RELEASE_VERSION}"
      
       echo "Deleting tag ${RELEASE_VERSION} if not already deleted ${RELEASE_VERSION}"
-      curl --request DELETE --header "PRIVATE-TOKEN: $WRITE_API_PAT" "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/tags/${RELEASE_VERSION}" || echo "Could not delete tag ${RELEASE_VERSION}"
+      curl --request DELETE --header "PRIVATE-TOKEN: $WRITE_API_PAT" "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/repository/tags/${RELEASE_VERSION}" || echo "Could not delete tag ${RELEASE_VERSION}"
 
       echo "Uploading build/$RELEASE_DOCKER_IMAGE_FILE_NAME ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/iep-node-installer/${RELEASE_VERSION}/iep-node-installer.exe"
       curl --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file ./build/distributions/iep-node-installer.exe ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/iep-node-installer/${RELEASE_VERSION}/iep-node-installer.exe
