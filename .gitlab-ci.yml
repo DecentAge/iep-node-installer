@@ -110,6 +110,8 @@ create-github-release:
   script:
     - |
       RELEASE_VERSION=$(cat release-version.txt)
+      awk -v ver="$RELEASE_VERSION" '$0 ~ "^## \\[" ver "\\]"{f=1;next} f&&/^## \[/{exit} f{print}' CHANGELOG.md > RELEASE_NOTES.md || true
+      [ -s RELEASE_NOTES.md ] || echo "Release ${RELEASE_VERSION} (${RELEASE_NAME})" > RELEASE_NOTES.md
       gh --version
 
       export GH_REPO=github.com/DecentAge/${CI_PROJECT_NAME}
@@ -126,8 +128,7 @@ create-github-release:
       sleep 4	  
    
       echo "Creating release ${RELEASE_VERSION}"
-      RELEASE_DESCRIPTION_PATH=${PWD}/iep-node-artifacts/CHANGELOG-${RELEASE_VERSION}.md
-      gh release create $RELEASE_VERSION --target $CI_COMMIT_REF_NAME --title "$RELEASE_VERSION ($RELEASE_NAME)" --notes-file ${RELEASE_DESCRIPTION_PATH}
+      gh release create $RELEASE_VERSION --target $CI_COMMIT_REF_NAME --title "$RELEASE_VERSION ($RELEASE_NAME)" --notes-file RELEASE_NOTES.md
 
       upload_release_file() {
         local file_path=$1
@@ -155,6 +156,8 @@ create-gitlab-release:
   script:
     - |
       RELEASE_VERSION=$(cat release-version.txt)
+      awk -v ver="$RELEASE_VERSION" '$0 ~ "^## \\[" ver "\\]"{f=1;next} f&&/^## \[/{exit} f{print}' CHANGELOG.md > RELEASE_NOTES.md || true
+      [ -s RELEASE_NOTES.md ] || echo "Release ${RELEASE_VERSION} (${RELEASE_NAME})" > RELEASE_NOTES.md
       echo ""
       echo "Deleting release ${RELEASE_VERSION}"
       curl --request DELETE --header "PRIVATE-TOKEN: $WRITE_API_PAT" "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/releases/${RELEASE_VERSION}" || echo "Could not delete release ${RELEASE_VERSION}"
@@ -175,7 +178,7 @@ create-gitlab-release:
       echo "Creating release ${RELEASE_VERSION}"
   release:
     name: "$RELEASE_VERSION ($RELEASE_NAME)"
-    description: "iep-node-artifacts/CHANGELOG-${RELEASE_VERSION}.md"
+    description: "RELEASE_NOTES.md"
     tag_name: "$RELEASE_VERSION"
 #    milestones:
 #      - "$RELEASE_VERSION ($RELEASE_NAME) ${CI_PROJECT_ID}"
