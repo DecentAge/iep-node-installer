@@ -141,9 +141,11 @@ create-github-release:
       upload_release_file ./build/distributions/iep-node-installer.run "Linux (x64)"
       upload_release_file ./build/distributions/iep-node-installer.tar.gz "MacOS (x64)"
   allow_failure: true
-  # Only where a DecentAge GitHub mirror exists (GITHUB_RELEASE_ENABLED=true on the project).
+  # Cut by iep-release/finalize (which triggers this pipeline with
+  # FINALIZE_RELEASE=true), so the release goes live WITH the finalized version,
+  # not at master-merge. Still only where a DecentAge GitHub mirror exists.
   rules:
-    - if: '$CI_COMMIT_BRANCH == "master" && $GITHUB_RELEASE_ENABLED == "true"'
+    - if: '$CI_COMMIT_BRANCH == "master" && $GITHUB_RELEASE_ENABLED == "true" && $FINALIZE_RELEASE == "true"'
   tags:
     - ci-cd
 
@@ -160,10 +162,10 @@ create-gitlab-release:
       [ -s RELEASE_NOTES.md ] || echo "Release ${RELEASE_VERSION} (${RELEASE_NAME})" > RELEASE_NOTES.md
       echo ""
       echo "Deleting release ${RELEASE_VERSION}"
-      curl --request DELETE --header "PRIVATE-TOKEN: $WRITE_API_PAT" "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/releases/${RELEASE_VERSION}" || echo "Could not delete release ${RELEASE_VERSION}"
-     
+      curl --request DELETE --header "PRIVATE-TOKEN: $GITLAB_TOKEN" "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/releases/${RELEASE_VERSION}" || echo "Could not delete release ${RELEASE_VERSION}"
+
       echo "Deleting tag ${RELEASE_VERSION} if not already deleted ${RELEASE_VERSION}"
-      curl --request DELETE --header "PRIVATE-TOKEN: $WRITE_API_PAT" "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/repository/tags/${RELEASE_VERSION}" || echo "Could not delete tag ${RELEASE_VERSION}"
+      curl --request DELETE --header "PRIVATE-TOKEN: $GITLAB_TOKEN" "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/repository/tags/${RELEASE_VERSION}" || echo "Could not delete tag ${RELEASE_VERSION}"
 
       echo "Uploading build/$RELEASE_DOCKER_IMAGE_FILE_NAME ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/iep-node-installer/${RELEASE_VERSION}/iep-node-installer.exe"
       curl --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file ./build/distributions/iep-node-installer.exe ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/iep-node-installer/${RELEASE_VERSION}/iep-node-installer.exe
@@ -193,7 +195,9 @@ create-gitlab-release:
         - name: "MacOS (x64)"
           url: "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/iep-node-installer/${RELEASE_VERSION}/iep-node-installer.tar.gz"
           link_type: "package"
-  only:
-    - master
+  # Cut by iep-release/finalize (triggers this pipeline with FINALIZE_RELEASE=true)
+  # so the installer release goes live WITH the finalized version, not at merge.
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master" && $FINALIZE_RELEASE == "true"'
   tags:
     - ci-cd
