@@ -186,7 +186,7 @@ iep.installer.xin.adminPassword=$AdminPassword
     }
 
     # 4. Verify install layout + bundled JRE.
-    foreach ($d in 'bin','jre','lib','scripts','legacy_libs') {
+    foreach ($d in 'bin','jre','lib','scripts') {
         if (-not (Test-Path (Join-Path $InstallPath $d))) { Fail "missing $d in install" }
     }
     $bundledJava = Join-Path $InstallPath 'jre\bin\java.exe'
@@ -194,8 +194,9 @@ iep.installer.xin.adminPassword=$AdminPassword
     $jreVersion = & $bundledJava '-version' 2>&1 | Select-Object -First 1
     if ($jreVersion -notmatch '21\.') { Fail "bundled JRE is not JDK 21: $jreVersion" }
     Log "bundled JRE: $jreVersion"
-    if (-not (Test-Path (Join-Path $InstallPath 'legacy_libs\h2-1.4.191.jar'))) {
-        Fail 'H2 1.4 legacy migrator jar missing'
+    # Since 0.4.3 the H2 1.4 engine is no longer shipped (critical CVEs).
+    if (Test-Path (Join-Path $InstallPath 'legacy_libs\h2-1.4.191.jar')) {
+        Fail 'the H2 1.4 jar (critical CVEs) is still shipped'
     }
 
     # 5. Start node. `start.bat` launches `bin\iep-node` and exits; the daemon
