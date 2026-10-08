@@ -15,9 +15,9 @@ Two scripts, one per platform family:
 2. Refuse to run if `~/.iep` (Unix) / `%USERPROFILE%\.iep` (Windows) already exists, so the test never clobbers a real wallet's data. Override with `CLOBBER_HOME=1` (env, Linux/macOS) or `$env:CLOBBER_HOME='1'` (PowerShell) if you know the dir is disposable. iep-node *always* writes its data dir under Java's `user.home` (read from the OS passwd entry, not from `$HOME`), so we can't sandbox it cleanly with env overrides — the trap/finally removes the data dir after the run instead.
 3. Generate an unattended `-options` file with `INSTALL_PATH`, env (testnet by default), throwaway password, `startAfterInstallation=false`.
 4. Run `java -jar iep-node-installer.jar -options <file>` and verify install completed.
-5. Assert the install layout is correct: `bin/`, `jre/`, `lib/`, `scripts/`, `legacy_libs/`.
+5. Assert the install layout is correct: `bin/`, `jre/`, `lib/`, `scripts/`.
 6. Assert the bundled JRE prints version `21.x` (the JDK 21 migration target).
-7. Assert `legacy_libs/h2-1.4.191.jar` is present (H2 1.4 → 2.x migration safety net).
+7. Assert `legacy_libs/h2-1.4.191.jar` is **not** shipped any more (H2 1.4 engine removed in 0.4.3, critical CVEs).
 8. Pre-flight: refuse if the API port (default 23457 mainnet / 9876 testnet) or peer port (23456 mainnet / 8776 testnet) is already bound, or if any `xin.Xin` java process is already running.
 9. Start the node via `bin/start.sh` (or `bin/start.bat`).
 10. Poll `GET /api?requestType=getBlockchainStatus` until it returns 200, up to a timeout (default 90s). Tail `console.log` + `xin.log` while waiting and **fail fast** on `BindException` / `Address already in use` / `Failed to start`. If the API answers but our `$NODE_PID` has died, fail with "somebody else is on this port" — protects against false positives from a pre-existing node.
@@ -82,6 +82,6 @@ test-installer-linux:
 
 ## What this does NOT cover
 
-- The H2 1.4 → 2.x **migration** itself: that needs a pre-existing legacy `xin.h2.db` snapshot to migrate. The smoke test only verifies the migrator jar ships with the install. See `HANDOFF.md` §2 for the dry-run procedure.
+- The H2 1.4 → 2.x **migration** itself: that needs a pre-existing legacy `xin.h2.db` snapshot to migrate. Since 0.4.3 the H2 1.4 engine is no longer shipped; such a database has to go through release 0.4.2 first (or the operator supplies the jar). See `HANDOFF.md` §2 for the dry-run procedure.
 - GUI / desktop mode: tests run in headless command-line mode (`xin.runtime.mode` defaults to `desktop`, but no display is required for the API to come up).
 - Cross-network behavior: only checks that `getBlockchainStatus` returns; doesn't validate sync against peers.

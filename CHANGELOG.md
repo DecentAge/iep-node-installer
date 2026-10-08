@@ -1,6 +1,9 @@
 # Changelog
 
 ## [Unreleased]
+### Removed
+- `legacy_libs/h2-1.4.191.jar` is no longer part of the installation (removed from the node distribution, critical CVEs); the install test now checks that it is absent. Upgrading from a release before 0.4.1 needs release 0.4.2 once first.
+
 
 ## [0.4.2] - 2026-10-05
 ### Changed
