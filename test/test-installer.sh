@@ -175,15 +175,16 @@ grep -q '\[ Console installation done \]' "$TEST_ROOT/install.log" \
     || { tail -30 "$TEST_ROOT/install.log"; fail "install did not complete"; }
 
 # 4. Verify install layout + bundled JRE.
-for d in bin jre lib scripts legacy_libs; do
+for d in bin jre lib scripts; do
     [[ -d "$INSTALL_PATH/$d" ]] || fail "missing $d/ in install"
 done
 [[ -x "$INSTALL_PATH/jre/bin/java" ]] || fail "bundled JRE binary not present"
 JRE_VERSION=$("$INSTALL_PATH/jre/bin/java" -version 2>&1 | head -1)
 echo "$JRE_VERSION" | grep -q '21\.' || fail "bundled JRE is not JDK 21: $JRE_VERSION"
 log "bundled JRE: $JRE_VERSION"
-[[ -f "$INSTALL_PATH/legacy_libs/h2-1.4.191.jar" ]] \
-    || fail "H2 1.4 legacy migrator jar missing"
+# Since 0.4.3 the H2 1.4 engine is no longer shipped (critical CVEs).
+[[ ! -e "$INSTALL_PATH/legacy_libs/h2-1.4.191.jar" ]] \
+    || fail "the H2 1.4 jar (critical CVEs) is still shipped"
 
 # 5. Start node. `start.sh` is a wrapper that nohups bin/iep-node and exits;
 #    the actual daemon pid is written by start.sh to $NODE_HOME_DIR/iep-node.pid.
