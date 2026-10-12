@@ -12,6 +12,23 @@ variables:
 # `release:` keyword below tags THIS version instead of a hard-coded one. Without
 # this the release: block used a stale literal while the scripts uploaded the
 # release-version.txt version -> tag/asset mismatch.
+# Build the installer for a release (publish-release: FINALIZE_RELEASE=true), when
+# triggered or run by hand, or when the installer itself changes on develop. A
+# plain release merge to master or a version bump builds nothing.
+.installer-build-rules:
+  rules:
+    - if: '$FINALIZE_RELEASE == "true"'
+    - if: '$CI_PIPELINE_SOURCE =~ /^(pipeline|trigger|web|api)$/'
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "develop"'
+      changes:
+        - izpack/**/*
+        - src/**/*
+        - test/**/*
+        - create-*.sh
+        - "*.properties"
+        - build.gradle
+        - settings.gradle
+
 resolve-release-version:
   image: alpine:latest
   stage: prepare
@@ -25,6 +42,7 @@ resolve-release-version:
     - ci-cd
 
 download-artifacts:
+  extends: .installer-build-rules
   stage: prepare
   tags:
     - ci-cd
@@ -40,6 +58,7 @@ download-artifacts:
       - iep-node-artifacts
 
 build-windows:
+  extends: .installer-build-rules
   image: adoptopenjdk/openjdk11:alpine-slim
   stage: build
   before_script:
@@ -59,6 +78,7 @@ build-windows:
     - ci-cd
 
 build-linux:
+  extends: .installer-build-rules
   image: adoptopenjdk/openjdk11:alpine-slim
   stage: build
   before_script:
@@ -78,6 +98,7 @@ build-linux:
     - ci-cd
 
 build-mac:
+  extends: .installer-build-rules
   image: adoptopenjdk/openjdk11:alpine-slim
   stage: build
   before_script:
