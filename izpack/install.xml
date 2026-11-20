@@ -227,6 +227,7 @@
 			<os family="mac" />
 			
 			<executable targetfile="${INSTALL_PATH}/jre/Home/bin/java" failure="abort" keep="true" />
+			<executable targetfile="${INSTALL_PATH}/jre/Home/lib/jspawnhelper" failure="abort" keep="true" />
 
 			<executable targetfile="${INSTALL_PATH}/bin/${xin.app.name}" />
 			<executable targetfile="${INSTALL_PATH}/bin/dev" />
@@ -253,6 +254,7 @@
 			<os family="unix" />
 			
 			<executable targetfile="${INSTALL_PATH}/jre/bin/java" failure="abort" keep="true" />
+			<executable targetfile="${INSTALL_PATH}/jre/lib/jspawnhelper" failure="abort" keep="true" />
 
 			<executable targetfile="${INSTALL_PATH}/bin/${xin.app.name}" />
 			<executable targetfile="${INSTALL_PATH}/bin/dev" />
