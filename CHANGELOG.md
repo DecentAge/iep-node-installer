@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Security
+- Bundled JRE upgraded to Temurin 21.0.13+9 (Linux/Windows/macOS), picking up the Java SE security updates since 21.0.5.
 
 ## [0.4.4] - 2026-10-12
 ### Changed
