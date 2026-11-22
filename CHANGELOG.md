@@ -1,10 +1,16 @@
 # Changelog
 
 ## [Unreleased]
-### Security
-- Bundled JRE upgraded to Temurin 21.0.13+9 (Linux/Windows/macOS), picking up the Java SE security updates since 21.0.5.
+
+## [0.4.5] - 2026-11-22
+### Changed
+- Pinned commons-io to 2.22.0 in the installer.
+
 ### Fixed
 - Linux/macOS: the bundled JRE's `jspawnhelper` is now executable after install, so Java can start subprocesses again (the uninstaller failed with `posix_spawn failed, error: 13` and left the installation in place).
+
+### Security
+- Bundled JRE upgraded to Temurin 21.0.13+9 (Linux/Windows/macOS), picking up the Java SE security updates since 21.0.5.
 
 ## [0.4.4] - 2026-10-12
 ### Changed
