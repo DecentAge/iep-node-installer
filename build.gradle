@@ -57,6 +57,9 @@ configurations {
   izpackUtils {
     transitive = false
   }
+  izpack {
+    resolutionStrategy.force 'commons-io:commons-io:2.22.0'
+  }
 }
 
 dependencies {
